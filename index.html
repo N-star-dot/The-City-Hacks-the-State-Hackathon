@@ -1,13 +1,535 @@
-```xml
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student Signal — Field Truth → Action</title>
+<title>Student Signal — 345 E 15th St | The City Hacks the State</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
-:root {
+/* === GLOBAL === */
+body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+/* === TOP NAV === */
+.top-challenge-bar {
+  background: #0a0c12;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid #2e3346;
+  position: sticky;
+  top: 0;
+  z-index: 99999;
+  height: 44px;
+}
+.top-challenge-bar .brand {
+  padding: 0 20px;
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.top-challenge-bar .tabs {
+  display: flex;
+  margin-left: auto;
+  height: 100%;
+}
+.top-challenge-bar .ctab {
+  padding: 0 20px;
+  color: #8b92a8;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s;
+  height: 100%;
+  user-select: none;
+}
+.top-challenge-bar .ctab:hover { color: #e4e7ef; background: #1a1d27; }
+.top-challenge-bar .ctab.active { color: #fff; border-bottom-color: #6366f1; background: #1a1d27; }
+
+.challenge-panel { display: none; }
+.challenge-panel.visible { display: block; }
+
+/* === CHALLENGE 1 STYLES === */
+#ch1-app {
+  background: #0f1117;
+  color: #e4e7ef;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  line-height: 1.5;
+  min-height: calc(100vh - 44px);
+}
+#ch1-app * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface-2: #242836;
+      --border: #2e3346;
+      --text: #e4e7ef;
+      --text-muted: #8b92a8;
+      --accent: #6366f1;
+      --accent-hover: #818cf8;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --info: #3b82f6;
+      --radius: 12px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.3);
+    }
+
+    
+    
+    #ch1-app-body-skip {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* ─── Header ─────────────────────────────────────────────────────── */
+    .header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header h1 {
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header h1 .logo {
+      width: 28px;
+      height: 28px;
+      background: var(--accent);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .header .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* ─── Main Layout ────────────────────────────────────────────────── */
+    .main {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 0;
+      height: calc(100vh - 65px);
+    }
+
+    .main.detail-closed {
+      grid-template-columns: 1fr;
+    }
+
+    .content {
+      padding: 24px 32px;
+      overflow-y: auto;
+    }
+
+    /* ─── Counter Cards ──────────────────────────────────────────────── */
+    .counters {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .counter-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .counter-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .counter-card.active {
+      border-color: var(--accent);
+      background: rgba(99, 102, 241, 0.08);
+    }
+
+    .counter-card .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .counter-card .value {
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    .counter-card .sublabel {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .counter-card.open .value { color: var(--info); }
+    .counter-card.progress .value { color: var(--warning); }
+    .counter-card.overdue .value { color: var(--danger); }
+    .counter-card.total .value { color: var(--text); }
+
+    /* ─── Filters ────────────────────────────────────────────────────── */
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-btn:hover { border-color: var(--accent); color: var(--text); }
+    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    .search-input {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      color: var(--text);
+      width: 250px;
+      outline: none;
+      margin-left: auto;
+    }
+
+    .search-input:focus { border-color: var(--accent); }
+    .search-input::placeholder { color: var(--text-muted); }
+
+    /* ─── Table ──────────────────────────────────────────────────────── */
+    .table-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      padding: 12px 16px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      text-align: left;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+      font-weight: 600;
+    }
+
+    tbody tr {
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+
+    tbody tr:hover {
+      background: var(--surface-2);
+    }
+
+    tbody tr.selected {
+      background: rgba(99, 102, 241, 0.1);
+    }
+
+    tbody td {
+      padding: 14px 16px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    /* ─── Badges ─────────────────────────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-open { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+    .badge-to-do { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+    .badge-in-progress { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .badge-completed { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .badge-overdue { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+    .badge-cancelled { background: rgba(107, 114, 128, 0.15); color: #9ca3af; }
+
+    .priority-high { color: var(--danger); font-weight: 600; }
+    .priority-medium { color: var(--warning); }
+    .priority-low { color: var(--text-muted); }
+
+    /* ─── Detail Panel ───────────────────────────────────────────────── */
+    .detail-panel {
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 24px;
+    }
+
+    .detail-panel.hidden { display: none; }
+
+    .detail-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
+      float: right;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .detail-close:hover { background: var(--surface-2); color: var(--text); }
+
+    .detail-panel h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      padding-right: 40px;
+    }
+
+    .detail-section {
+      margin-bottom: 20px;
+    }
+
+    .detail-section h3 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .detail-row .label { color: var(--text-muted); }
+    .detail-row .value { font-weight: 500; }
+
+    .detail-description {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      padding: 12px;
+      background: var(--surface-2);
+      border-radius: 8px;
+    }
+
+    /* ─── Student Signal ─────────────────────────────────────────────── */
+    .signal-section {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .signal-section h3 {
+      font-size: 14px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .signal-input {
+      width: 100%;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 14px;
+      color: var(--text);
+      resize: vertical;
+      min-height: 80px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .signal-input:focus { border-color: var(--accent); }
+
+    .signal-btn {
+      margin-top: 10px;
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.15s;
+      width: 100%;
+    }
+
+    .signal-btn:hover { background: var(--accent-hover); }
+
+    .signal-success {
+      margin-top: 10px;
+      padding: 10px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--success);
+      display: none;
+    }
+
+    /* ─── Building Summary ───────────────────────────────────────────── */
+    .buildings-section {
+      margin-top: 24px;
+    }
+
+    .building-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .building-bar .name {
+      flex: 1;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .building-bar .bar {
+      width: 100px;
+      height: 6px;
+      background: var(--surface-2);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .building-bar .bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 3px;
+      transition: width 0.3s;
+    }
+
+    .building-bar .count {
+      font-size: 12px;
+      font-weight: 600;
+      min-width: 24px;
+      text-align: right;
+    }
+
+    /* ─── Loading State ──────────────────────────────────────────────── */
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+      color: var(--text-muted);
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-state {
+      padding: 40px;
+      text-align: center;
+      color: var(--danger);
+    }
+
+    /* ─── Responsive ─────────────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .main { grid-template-columns: 1fr; }
+      .detail-panel { 
+        position: fixed; 
+        right: 0; 
+        top: 65px; 
+        bottom: 0; 
+        width: 400px;
+        box-shadow: -4px 0 24px rgba(0,0,0,0.4);
+        z-index: 50;
+      }
+      .counters { grid-template-columns: repeat(2, 1fr); }
+    }
+  
+
+/* === CHALLENGE 2 STYLES (scoped) === */
+#ch2-app {
+  background: #f8f9fa;
+  min-height: calc(100vh - 44px);
+}
+#ch2-app * { box-sizing: border-box; }
+
+#ch2-app :root {
   --color-bg: #f8f9fa;
   --color-surface: #ffffff;
   --color-text: #1a1a2e;
@@ -38,31 +560,31 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text); line-height: 1.5; min-height: 100vh; }
+#ch2-app body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text); line-height: 1.5; min-height: 100vh; }
 
 
 /* Challenge Navigation Bar */
-.challenge-nav {
+#ch2-app .challenge-nav {
   background: #0f1117;
   border-bottom: 1px solid #2e3346;
   padding: 8px 32px;
   font-size: 13px;
 }
-.challenge-nav-inner {
+#ch2-app .challenge-nav-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   max-width: 100%;
 }
-.challenge-nav-label {
+#ch2-app .challenge-nav-label {
   color: #8b92a8;
   font-weight: 500;
 }
-.challenge-nav-links {
+#ch2-app .challenge-nav-links {
   display: flex;
   gap: 4px;
 }
-.challenge-link {
+#ch2-app .challenge-link {
   padding: 6px 14px;
   border-radius: 6px;
   color: #8b92a8;
@@ -73,11 +595,11 @@ body { font-family: var(--font-sans); background: var(--color-bg); color: var(--
   align-items: center;
   gap: 6px;
 }
-.challenge-link:hover { background: #1a1d27; color: #e4e7ef; }
-.challenge-link.active { background: #0052CC; color: white; }
+#ch2-app .challenge-link:hover { background: #1a1d27; color: #e4e7ef; }
+#ch2-app .challenge-link.active { background: #0052CC; color: white; }
 
 /* Header */
-.header {
+#ch2-app .header {
   background: linear-gradient(135deg, #0052CC 0%, #0747A6 100%);
   color: white;
   padding: 24px 32px;
@@ -86,15 +608,15 @@ body { font-family: var(--font-sans); background: var(--color-bg); color: var(--
   z-index: 100;
   box-shadow: var(--shadow-md);
 }
-.header h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
-.header p { font-size: 13px; opacity: 0.85; }
-.header-flow {
+#ch2-app .header h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+#ch2-app .header p { font-size: 13px; opacity: 0.85; }
+#ch2-app .header-flow {
   display: flex;
   gap: 8px;
   margin-top: 12px;
   flex-wrap: wrap;
 }
-.flow-step {
+#ch2-app .flow-step {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -106,23 +628,23 @@ body { font-family: var(--font-sans); background: var(--color-bg); color: var(--
   cursor: pointer;
   transition: all 0.2s;
 }
-.flow-step.active {
+#ch2-app .flow-step.active {
   background: white;
   color: #0052CC;
 }
-.flow-step:hover { background: rgba(255,255,255,0.3); }
-.flow-step.active:hover { background: white; }
-.flow-arrow { opacity: 0.5; font-size: 11px; }
+#ch2-app .flow-step:hover { background: rgba(255,255,255,0.3); }
+#ch2-app .flow-step.active:hover { background: white; }
+#ch2-app .flow-arrow { opacity: 0.5; font-size: 11px; }
 
 /* Main layout */
-.container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+#ch2-app .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
 
 /* Panels */
-.panel { display: none; }
-.panel.active { display: block; }
+#ch2-app .panel { display: none; }
+#ch2-app .panel.active { display: block; }
 
 /* Cards */
-.card {
+#ch2-app .card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
@@ -131,13 +653,13 @@ body { font-family: var(--font-sans); background: var(--color-bg); color: var(--
   box-shadow: var(--shadow-sm);
   transition: all 0.2s;
 }
-.card:hover { box-shadow: var(--shadow-md); }
-.card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-.card-title { font-size: 16px; font-weight: 600; }
-.card-subtitle { font-size: 13px; color: var(--color-text-secondary); margin-top: 2px; }
+#ch2-app .card:hover { box-shadow: var(--shadow-md); }
+#ch2-app .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+#ch2-app .card-title { font-size: 16px; font-weight: 600; }
+#ch2-app .card-subtitle { font-size: 13px; color: var(--color-text-secondary); margin-top: 2px; }
 
 /* Badges */
-.badge {
+#ch2-app .badge {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -148,15 +670,15 @@ body { font-family: var(--font-sans); background: var(--color-bg); color: var(--
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
-.badge-critical { background: var(--color-critical-bg); color: var(--color-critical); }
-.badge-high { background: var(--color-warning-bg); color: #b86e00; }
-.badge-medium { background: var(--color-info-bg); color: var(--color-info); }
-.badge-low { background: var(--color-border-light); color: var(--color-text-muted); }
-.badge-stage { background: var(--color-primary-light); color: var(--color-primary); }
-.badge-category { background: #f3e8ff; color: #7c3aed; }
+#ch2-app .badge-critical { background: var(--color-critical-bg); color: var(--color-critical); }
+#ch2-app .badge-high { background: var(--color-warning-bg); color: #b86e00; }
+#ch2-app .badge-medium { background: var(--color-info-bg); color: var(--color-info); }
+#ch2-app .badge-low { background: var(--color-border-light); color: var(--color-text-muted); }
+#ch2-app .badge-stage { background: var(--color-primary-light); color: var(--color-primary); }
+#ch2-app .badge-category { background: #f3e8ff; color: #7c3aed; }
 
 /* Confidence badges */
-.confidence-badge {
+#ch2-app .confidence-badge {
   display: inline-flex;
   align-items: center;
   gap: 3px;
@@ -167,15 +689,15 @@ body { font-family: var(--font-sans); background: var(--color-bg); color: var(--
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-.conf-verified { background: #e3fcef; color: #006644; }
-.conf-likely { background: #deebff; color: #0052CC; }
-.conf-inferred { background: #f3e8ff; color: #7c3aed; }
-.conf-conflicting { background: #ffebe6; color: #de350b; }
-.conf-missing { background: #fffae6; color: #b86e00; }
-.conf-needs-inspection { background: #f1f5f9; color: #44546f; }
+#ch2-app .conf-verified { background: #e3fcef; color: #006644; }
+#ch2-app .conf-likely { background: #deebff; color: #0052CC; }
+#ch2-app .conf-inferred { background: #f3e8ff; color: #7c3aed; }
+#ch2-app .conf-conflicting { background: #ffebe6; color: #de350b; }
+#ch2-app .conf-missing { background: #fffae6; color: #b86e00; }
+#ch2-app .conf-needs-inspection { background: #f1f5f9; color: #44546f; }
 
 /* Record panel */
-.record-action {
+#ch2-app .record-action {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -186,8 +708,8 @@ body { font-family: var(--font-sans); background: var(--color-bg); color: var(--
   margin-bottom: 8px;
   transition: all 0.2s;
 }
-.record-action:hover { border-color: var(--color-primary); background: #f8faff; }
-.record-action .record-icon {
+#ch2-app .record-action:hover { border-color: var(--color-primary); background: #f8faff; }
+#ch2-app .record-action .record-icon {
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -199,46 +721,46 @@ body { font-family: var(--font-sans); background: var(--color-bg); color: var(--
   font-size: 14px;
   flex-shrink: 0;
 }
-.record-action .record-text { flex: 1; }
-.record-action .record-text strong { font-size: 14px; display: block; }
-.record-action .record-text small { font-size: 12px; color: var(--color-text-secondary); }
-.record-action .record-status {
+#ch2-app .record-action .record-text { flex: 1; }
+#ch2-app .record-action .record-text strong { font-size: 14px; display: block; }
+#ch2-app .record-action .record-text small { font-size: 12px; color: var(--color-text-secondary); }
+#ch2-app .record-action .record-status {
   font-size: 11px;
   font-weight: 600;
   padding: 4px 10px;
   border-radius: 100px;
 }
-.record-status.queued { background: var(--color-warning-bg); color: #b86e00; }
-.record-status.sent { background: var(--color-success-bg); color: #006644; }
+#ch2-app .record-status.queued { background: var(--color-warning-bg); color: #b86e00; }
+#ch2-app .record-status.sent { background: var(--color-success-bg); color: #006644; }
 
 
 /* Work Order Cards */
-.wo-card { cursor: pointer; border-left: 4px solid transparent; }
-.wo-card:hover { border-left-color: var(--color-primary); }
-.wo-card.selected { border-left-color: var(--color-primary); background: #f8faff; }
-.wo-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-.wo-description { font-size: 14px; color: var(--color-text-secondary); margin-top: 8px; padding: 12px; background: var(--color-border-light); border-radius: var(--radius-sm); border-left: 3px solid var(--color-warning); }
-.wo-description-label { font-size: 11px; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 4px; font-weight: 600; }
-.wo-weakness { font-size: 12px; color: var(--color-error); margin-top: 8px; font-style: italic; }
+#ch2-app .wo-card { cursor: pointer; border-left: 4px solid transparent; }
+#ch2-app .wo-card:hover { border-left-color: var(--color-primary); }
+#ch2-app .wo-card.selected { border-left-color: var(--color-primary); background: #f8faff; }
+#ch2-app .wo-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+#ch2-app .wo-description { font-size: 14px; color: var(--color-text-secondary); margin-top: 8px; padding: 12px; background: var(--color-border-light); border-radius: var(--radius-sm); border-left: 3px solid var(--color-warning); }
+#ch2-app .wo-description-label { font-size: 11px; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 4px; font-weight: 600; }
+#ch2-app .wo-weakness { font-size: 12px; color: var(--color-error); margin-top: 8px; font-style: italic; }
 
 /* Field Intake */
-.intake-form { max-width: 600px; }
-.intake-field {
+#ch2-app .intake-form { max-width: 600px; }
+#ch2-app .intake-field {
   margin-bottom: 20px;
 }
-.intake-label {
+#ch2-app .intake-label {
   display: block;
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 6px;
   color: var(--color-text);
 }
-.intake-hint {
+#ch2-app .intake-hint {
   font-size: 12px;
   color: var(--color-text-muted);
   margin-bottom: 8px;
 }
-textarea, input[type="text"], select {
+#ch2-app textarea, #ch2-app input[type="text"], #ch2-app select {
   width: 100%;
   padding: 12px 16px;
   border: 1px solid var(--color-border);
@@ -248,19 +770,19 @@ textarea, input[type="text"], select {
   transition: border-color 0.2s;
   background: var(--color-surface);
 }
-textarea:focus, input:focus, select:focus {
+#ch2-app textarea:focus, #ch2-app input:focus, #ch2-app select:focus {
   outline: none;
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(0,82,204,0.1);
 }
-textarea { resize: vertical; min-height: 100px; }
+#ch2-app textarea { resize: vertical; min-height: 100px; }
 
-.severity-pills {
+#ch2-app .severity-pills {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
 }
-.severity-pill {
+#ch2-app .severity-pill {
   padding: 8px 16px;
   border: 1px solid var(--color-border);
   border-radius: 100px;
@@ -269,11 +791,11 @@ textarea { resize: vertical; min-height: 100px; }
   transition: all 0.2s;
   background: var(--color-surface);
 }
-.severity-pill:hover { background: var(--color-border-light); }
-.severity-pill.selected { background: var(--color-primary); color: white; border-color: var(--color-primary); }
+#ch2-app .severity-pill:hover { background: var(--color-border-light); }
+#ch2-app .severity-pill.selected { background: var(--color-primary); color: white; border-color: var(--color-primary); }
 
 /* Buttons */
-.btn {
+#ch2-app .btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -286,23 +808,23 @@ textarea { resize: vertical; min-height: 100px; }
   transition: all 0.2s;
   font-family: var(--font-sans);
 }
-.btn-primary { background: var(--color-primary); color: white; }
-.btn-primary:hover { background: #0747A6; }
-.btn-secondary { background: var(--color-border-light); color: var(--color-text); border: 1px solid var(--color-border); }
-.btn-secondary:hover { background: var(--color-border); }
-.btn-success { background: var(--color-success); color: white; }
-.btn-success:hover { background: #2d9e6b; }
-.btn-lg { padding: 14px 28px; font-size: 16px; }
+#ch2-app .btn-primary { background: var(--color-primary); color: white; }
+#ch2-app .btn-primary:hover { background: #0747A6; }
+#ch2-app .btn-secondary { background: var(--color-border-light); color: var(--color-text); border: 1px solid var(--color-border); }
+#ch2-app .btn-secondary:hover { background: var(--color-border); }
+#ch2-app .btn-success { background: var(--color-success); color: white; }
+#ch2-app .btn-success:hover { background: #2d9e6b; }
+#ch2-app .btn-lg { padding: 14px 28px; font-size: 16px; }
 
 /* AI Output */
-.ai-output {
+#ch2-app .ai-output {
   background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%);
   border: 1px solid #c8d6e5;
   border-radius: var(--radius-md);
   padding: 24px;
   margin-top: 20px;
 }
-.ai-output h3 {
+#ch2-app .ai-output h3 {
   font-size: 14px;
   color: var(--color-primary);
   margin-bottom: 16px;
@@ -310,14 +832,14 @@ textarea { resize: vertical; min-height: 100px; }
   align-items: center;
   gap: 8px;
 }
-.ai-field {
+#ch2-app .ai-field {
   display: flex;
   gap: 12px;
   padding: 8px 0;
   border-bottom: 1px solid rgba(0,82,204,0.1);
 }
-.ai-field:last-child { border-bottom: none; }
-.ai-field-label {
+#ch2-app .ai-field:last-child { border-bottom: none; }
+#ch2-app .ai-field-label {
   font-size: 12px;
   font-weight: 600;
   color: var(--color-text-muted);
@@ -326,21 +848,21 @@ textarea { resize: vertical; min-height: 100px; }
   letter-spacing: 0.03em;
   padding-top: 2px;
 }
-.ai-field-value {
+#ch2-app .ai-field-value {
   font-size: 14px;
   color: var(--color-text);
   flex: 1;
 }
 
 /* Enrichment */
-.enrichment-card {
+#ch2-app .enrichment-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: 16px;
   margin-bottom: 12px;
 }
-.enrichment-source {
+#ch2-app .enrichment-source {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -350,9 +872,9 @@ textarea { resize: vertical; min-height: 100px; }
   font-weight: 600;
   margin-bottom: 8px;
 }
-.enrichment-source i { color: var(--color-primary); }
-.enrichment-text { font-size: 14px; color: var(--color-text-secondary); line-height: 1.6; }
-.enrichment-implication {
+#ch2-app .enrichment-source i { color: var(--color-primary); }
+#ch2-app .enrichment-text { font-size: 14px; color: var(--color-text-secondary); line-height: 1.6; }
+#ch2-app .enrichment-implication {
   margin-top: 10px;
   padding: 10px 14px;
   background: var(--color-warning-bg);
@@ -362,7 +884,7 @@ textarea { resize: vertical; min-height: 100px; }
 }
 
 /* Workflow */
-.workflow-step {
+#ch2-app .workflow-step {
   display: flex;
   gap: 16px;
   padding: 16px;
@@ -371,7 +893,7 @@ textarea { resize: vertical; min-height: 100px; }
   background: var(--color-surface);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
-.workflow-number {
+#ch2-app .workflow-number {
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -384,29 +906,29 @@ textarea { resize: vertical; min-height: 100px; }
   font-weight: 700;
   flex-shrink: 0;
 }
-.workflow-content { flex: 1; }
-.workflow-action { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-.workflow-detail { font-size: 13px; color: var(--color-text-secondary); }
-.workflow-escalation {
+#ch2-app .workflow-content { flex: 1; }
+#ch2-app .workflow-action { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+#ch2-app .workflow-detail { font-size: 13px; color: var(--color-text-secondary); }
+#ch2-app .workflow-escalation {
   background: var(--color-error-bg);
   border: 1px solid #ffcdd2;
   border-radius: var(--radius-sm);
   padding: 12px 16px;
   margin-top: 16px;
 }
-.workflow-escalation h4 { font-size: 13px; color: var(--color-error); margin-bottom: 4px; }
-.workflow-escalation p { font-size: 13px; color: var(--color-text-secondary); }
+#ch2-app .workflow-escalation h4 { font-size: 13px; color: var(--color-error); margin-bottom: 4px; }
+#ch2-app .workflow-escalation p { font-size: 13px; color: var(--color-text-secondary); }
 
 /* Closure */
-.closure-card {
+#ch2-app .closure-card {
   text-align: center;
   padding: 40px;
 }
-.closure-icon { font-size: 48px; margin-bottom: 16px; }
-.closure-question { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
-.closure-sub { font-size: 14px; color: var(--color-text-secondary); margin-bottom: 24px; }
-.closure-options { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-.closure-option {
+#ch2-app .closure-icon { font-size: 48px; margin-bottom: 16px; }
+#ch2-app .closure-question { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+#ch2-app .closure-sub { font-size: 14px; color: var(--color-text-secondary); margin-bottom: 24px; }
+#ch2-app .closure-options { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+#ch2-app .closure-option {
   padding: 16px 24px;
   border: 2px solid var(--color-border);
   border-radius: var(--radius-md);
@@ -414,14 +936,14 @@ textarea { resize: vertical; min-height: 100px; }
   transition: all 0.2s;
   min-width: 140px;
 }
-.closure-option:hover { border-color: var(--color-primary); background: var(--color-primary-light); }
-.closure-option.selected { border-color: var(--color-primary); background: var(--color-primary-light); }
-.closure-option i { font-size: 24px; margin-bottom: 8px; display: block; }
-.closure-option span { font-size: 14px; font-weight: 600; display: block; }
-.closure-option small { font-size: 12px; color: var(--color-text-muted); display: block; margin-top: 4px; }
+#ch2-app .closure-option:hover { border-color: var(--color-primary); background: var(--color-primary-light); }
+#ch2-app .closure-option.selected { border-color: var(--color-primary); background: var(--color-primary-light); }
+#ch2-app .closure-option i { font-size: 24px; margin-bottom: 8px; display: block; }
+#ch2-app .closure-option span { font-size: 14px; font-weight: 600; display: block; }
+#ch2-app .closure-option small { font-size: 12px; color: var(--color-text-muted); display: block; margin-top: 4px; }
 
 /* Loading animation */
-.loading {
+#ch2-app .loading {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -429,7 +951,7 @@ textarea { resize: vertical; min-height: 100px; }
   color: var(--color-primary);
   font-size: 14px;
 }
-.loading-dots span {
+#ch2-app .loading-dots span {
   display: inline-block;
   width: 8px;
   height: 8px;
@@ -437,11 +959,11 @@ textarea { resize: vertical; min-height: 100px; }
   border-radius: 50%;
   animation: bounce 1.4s infinite ease-in-out both;
 }
-.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
-.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+#ch2-app .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+#ch2-app .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
 @keyframes bounce {
-  0%, 80%, 100% { transform: scale(0); }
-  40% { transform: scale(1.0); }
+#ch2-app 0%, #ch2-app 80%, #ch2-app 100% { transform: scale(0); }
+#ch2-app 40% { transform: scale(1.0); }
 }
 
 /* Section headers */
@@ -497,26 +1019,115 @@ textarea { resize: vertical; min-height: 100px; }
 }
 .summary-stat .value { font-size: 28px; font-weight: 700; font-family: var(--font-mono); color: var(--color-primary); }
 .summary-stat .label { font-size: 11px; color: var(--color-text-muted); text-transform: uppercase; margin-top: 4px; }
+
 </style>
 </head>
 <body>
 
-<!-- Cross-Challenge Navigation -->
-<div class="challenge-nav">
-  <div class="challenge-nav-inner">
-    <span class="challenge-nav-label">The City Hacks the State · Team 6</span>
-    <div class="challenge-nav-links">
-      <a href="challenge1/public/index.html" class="challenge-link">
-        <i class="fa-solid fa-chart-line"></i> Challenge 1: Dashboard
-      </a>
-      <a href="index.html" class="challenge-link active">
-        <i class="fa-solid fa-bolt"></i> Challenge 2: AI Workflow
-      </a>
-    </div>
+<div class="top-challenge-bar">
+  <div class="brand">🏢 345 E 15th St · Team 6</div>
+  <div class="tabs">
+    <div class="ctab active" onclick="showChallenge(1)" id="ctab1">📊 Challenge 1: Dashboard</div>
+    <div class="ctab" onclick="showChallenge(2)" id="ctab2">⚡ Challenge 2: AI Workflow</div>
   </div>
 </div>
 
-<div class="header">
+<div class="challenge-panel visible" id="ch1-panel">
+  <div id="ch1-app">
+    <!-- Header -->
+  <div class="header">
+    <h1>
+      <span class="logo">CA</span>
+      345 E 15th St · Work Orders
+    </h1>
+    <div class="status">
+      <span class="status-dot"></span>
+      <span id="connectionStatus">Connecting...</span>
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <div class="main detail-closed" id="mainLayout">
+    <!-- Content Area -->
+    <div class="content">
+      <!-- Counter Cards -->
+      <div class="counters">
+        <div class="counter-card open" data-filter="open" onclick="filterByStatus('open')">
+          <div class="label">Open</div>
+          <div class="value" id="countOpen">—</div>
+          <div class="sublabel">Awaiting action</div>
+        </div>
+        <div class="counter-card progress" data-filter="in_progress" onclick="filterByStatus('in_progress')">
+          <div class="label">In Progress</div>
+          <div class="value" id="countProgress">—</div>
+          <div class="sublabel">Being worked on</div>
+        </div>
+        <div class="counter-card overdue" data-filter="overdue" onclick="filterByStatus('overdue')">
+          <div class="label">Overdue</div>
+          <div class="value" id="countOverdue">—</div>
+          <div class="sublabel">Past due date</div>
+        </div>
+        <div class="counter-card total" data-filter="all" onclick="filterByStatus('all')">
+          <div class="label">Total</div>
+          <div class="value" id="countTotal">—</div>
+          <div class="sublabel">All work orders</div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="toolbar">
+        <button class="filter-btn active" data-priority="all" onclick="filterByPriority('all')">All Priorities</button>
+        <button class="filter-btn" data-priority="high" onclick="filterByPriority('high')">🔴 High</button>
+        <button class="filter-btn" data-priority="medium" onclick="filterByPriority('medium')">🟡 Medium</button>
+        <button class="filter-btn" data-priority="low" onclick="filterByPriority('low')">🟢 Low</button>
+        <input type="text" class="search-input" placeholder="Search work orders..." oninput="searchWorkOrders(this.value)">
+      </div>
+
+      <!-- Table -->
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Status</th>
+              <th>Priority</th>
+              <th>Asset</th>
+              <th>Location</th>
+              <th>Due Date</th>
+            </tr>
+          </thead>
+          <tbody id="workOrderTable">
+            <tr>
+              <td colspan="6">
+                <div class="loading">
+                  <div class="spinner"></div>
+                  <span>Loading work orders...</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Top Buildings by Open Work Orders -->
+      <div class="buildings-section">
+        <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin: 20px 0 12px;">Top Buildings by Open Work Orders</h3>
+        <div id="buildingsList"></div>
+      </div>
+    </div>
+
+    <!-- Detail Panel -->
+    <div class="detail-panel hidden" id="detailPanel">
+      <button class="detail-close" onclick="closeDetail()">&times;</button>
+      <div id="detailContent"></div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<div class="challenge-panel" id="ch2-panel">
+  <div id="ch2-app">
+    <div class="header">
   <h1><i class="fa-solid fa-bolt"></i> Student Signal</h1>
   <p>345 East 15th Street — Field Truth → Evidence → Action → Verification</p>
   <div class="header-flow">
@@ -901,8 +1512,328 @@ textarea { resize: vertical; min-height: 100px; }
     </div>
   </div>
 </div>
+  </div>
+</div>
 
 <script>
+function showChallenge(num) {
+  document.getElementById('ch1-panel').classList.remove('visible');
+  document.getElementById('ch2-panel').classList.remove('visible');
+  document.getElementById('ctab1').classList.remove('active');
+  document.getElementById('ctab2').classList.remove('active');
+  if (num === 1) {
+    document.getElementById('ch1-panel').classList.add('visible');
+    document.getElementById('ctab1').classList.add('active');
+  } else {
+    document.getElementById('ch2-panel').classList.add('visible');
+    document.getElementById('ctab2').classList.add('active');
+  }
+}
+</script>
+
+<script>
+// === CHALLENGE 1 LOGIC ===
+
+    // ─── State ─────────────────────────────────────────────────────────
+    let allWorkOrders = [];
+    let filteredWorkOrders = [];
+    let currentFilter = { status: 'all', priority: 'all', search: '' };
+    let selectedWorkOrder = null;
+
+    // ─── API Base URL ──────────────────────────────────────────────────
+    const API_BASE = window.location.origin;
+
+    // ─── Initialize ────────────────────────────────────────────────────
+    async function init() {
+      try {
+        throw new Error('merged-mode');
+        const health = await fetch(`${API_BASE}/api/health`).then(r => r.json());
+        
+        if (!health.hasCredentials) {
+          document.getElementById('connectionStatus').textContent = '⚠️ No credentials configured';
+          document.getElementById('connectionStatus').style.color = '#f59e0b';
+          // Load demo data for development
+          loadDemoData();
+          return;
+        }
+
+        document.getElementById('connectionStatus').textContent = 'Connected to CriticalAsset';
+        
+        // Fetch work orders
+        const data = await fetch(`${API_BASE}/api/workorders?limit=100`).then(r => r.json());
+        
+        if (data.error) {
+          throw new Error(data.error);
+        }
+
+        allWorkOrders = data.nodes || [];
+        applyFilters();
+      } catch (error) {
+        console.error('Init error:', error);
+        document.getElementById('connectionStatus').textContent = 'Demo Mode';
+        document.getElementById('connectionStatus').style.color = '#f59e0b';
+        loadDemoData();
+      }
+    }
+
+    // ─── Demo Data ─────────────────────────────────────────────────────
+    function loadDemoData() {
+      allWorkOrders = [
+        { id: 'ee4cacef-08e3-58e6-a94f-e0ff32c5e6f5', title: 'Annual Steam System Inspection', description: 'Perform comprehensive annual inspection of the steam pressure reducing valve station and safety relief valves.', severity: 'high', executionPriority: 'high', workOrderStage: { name: 'To Do' }, workOrderServiceCategory: 'hvac', createdAt: '2026-05-30T09:00:00Z', dueDate: '2026-06-10T17:00:00Z', asset: { id: '602454ae-2f73-5e90-a688-87945cc0b6e8', name: 'Steam Pressure Reducing Valve Station', category: 'HVAC / Steam', status: 'active' }, location: { id: '6bbaf32c-707e-5bae-a59e-447e8aff1efc', locationName: '345 East 15th Street', address: '345 E 15th St, New York, NY' }, assignee: { id: 'U-01', name: 'Assigned Tech' } },
+        { id: '29c750cd-7929-524a-ab7c-b3e1e965b0fd', title: 'Electrical Distribution Panel Preventive Maintenance', description: 'Conduct thermal imaging and tighten connections on main switchboard and distribution panels.', severity: 'medium', executionPriority: 'medium', workOrderStage: { name: 'To Do' }, workOrderServiceCategory: 'electrical', createdAt: '2026-05-30T09:00:00Z', dueDate: '2026-06-07T17:00:00Z', asset: { id: '1ac4e575-2686-503e-a9b7-20df593ae553', name: 'Main Switchboard', category: 'Electrical', status: 'active' }, location: { id: '6bbaf32c-707e-5bae-a59e-447e8aff1efc', locationName: '345 East 15th Street', address: '345 E 15th St, New York, NY' }, assignee: { id: 'U-02', name: 'Assigned Tech' } },
+        { id: 'c5338071-972b-5dc2-a676-cefade0b4838', title: 'Emergency Exit Sign & Lighting Test', description: 'Perform mandatory emergency exit signage and battery unit discharge test.', severity: 'critical', executionPriority: 'critical', workOrderStage: { name: 'To Do' }, workOrderServiceCategory: 'fire_and_life_safety', createdAt: '2026-05-30T09:00:00Z', dueDate: '2026-06-15T17:00:00Z', asset: { id: 'b082f439-6d72-5e2f-a3ff-371db1aac811', name: 'Exit Sign', category: 'Fire & Life Safety', status: 'active' }, location: { id: '6bbaf32c-707e-5bae-a59e-447e8aff1efc', locationName: '345 East 15th Street', address: '345 E 15th St, New York, NY' }, assignee: { id: 'U-03', name: 'Assigned Tech' } },
+      ];
+      applyFilters();
+    }
+
+    // ─── Filtering ─────────────────────────────────────────────────────
+    function applyFilters() {
+      const now = new Date();
+      
+      filteredWorkOrders = allWorkOrders.filter(wo => {
+        // Status filter
+        if (currentFilter.status !== 'all') {
+          const stage = wo.workOrderStage?.name?.toLowerCase().replace(/\s/g, '_') || 'open';
+          if (currentFilter.status === 'overdue') {
+            if (!wo.dueDate || new Date(wo.dueDate) >= now) return false;
+            if (stage === 'completed' || stage === 'cancelled') return false;
+          } else if (currentFilter.status === 'open' && stage !== 'open' && stage !== 'to_do' && stage !== 'to do') {
+            return false;
+          } else if (currentFilter.status === 'in_progress' && stage !== 'in_progress' && stage !== 'in progress') {
+            return false;
+          }
+        }
+
+        // Priority filter
+        if (currentFilter.priority !== 'all') {
+          const priority = (wo.severity || wo.executionPriority || '').toLowerCase();
+          if (currentFilter.priority === 'high' && priority !== 'high' && priority !== 'critical') return false;
+          if (currentFilter.priority === 'medium' && priority !== 'medium') return false;
+          if (currentFilter.priority === 'low' && priority !== 'low') return false;
+        }
+
+        // Search filter
+        if (currentFilter.search) {
+          const search = currentFilter.search.toLowerCase();
+          const searchable = [
+            wo.title, wo.description, wo.asset?.name, wo.asset?.category,
+            wo.location?.locationName, wo.assignee?.name
+          ].filter(Boolean).join(' ').toLowerCase();
+          if (!searchable.includes(search)) return false;
+        }
+
+        return true;
+      });
+
+      renderCounters();
+      renderTable();
+      renderBuildings();
+    }
+
+    function filterByStatus(status) {
+      currentFilter.status = status;
+      document.querySelectorAll('.counter-card').forEach(c => c.classList.remove('active'));
+      document.querySelector(`.counter-card[data-filter="${status}"]`)?.classList.add('active');
+      applyFilters();
+    }
+
+    function filterByPriority(priority) {
+      currentFilter.priority = priority;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector(`.filter-btn[data-priority="${priority}"]`)?.classList.add('active');
+      applyFilters();
+    }
+
+    function searchWorkOrders(query) {
+      currentFilter.search = query;
+      applyFilters();
+    }
+
+    // ─── Render Functions ──────────────────────────────────────────────
+    function renderCounters() {
+      const now = new Date();
+      const openStatuses = ['open', 'to do', 'to_do'];
+      const open = allWorkOrders.filter(wo => openStatuses.includes(wo.workOrderStage?.name?.toLowerCase())).length;
+      const inProgress = allWorkOrders.filter(wo => ['in progress', 'in_progress'].includes(wo.workOrderStage?.name?.toLowerCase())).length;
+      const overdue = allWorkOrders.filter(wo => {
+        const stage = wo.workOrderStage?.name?.toLowerCase();
+        return wo.dueDate && new Date(wo.dueDate) < now && stage !== 'completed' && stage !== 'cancelled' && stage !== 'done';
+      }).length;
+
+      document.getElementById('countOpen').textContent = open;
+      document.getElementById('countProgress').textContent = inProgress;
+      document.getElementById('countOverdue').textContent = overdue;
+      document.getElementById('countTotal').textContent = allWorkOrders.length;
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('workOrderTable');
+      
+      if (filteredWorkOrders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);">No work orders match the current filters.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filteredWorkOrders.map(wo => {
+        const status = wo.workOrderStage?.name || 'Unknown';
+        const statusClass = status.toLowerCase().replace(/\s/g, '-');
+        const priority = wo.severity || wo.executionPriority || 'Unknown';
+        const priorityClass = priority.toLowerCase() === 'critical' ? 'high' : priority.toLowerCase();
+        const isOverdue = wo.dueDate && new Date(wo.dueDate) < new Date() && statusClass !== 'completed';
+        const dueDisplay = wo.dueDate ? new Date(wo.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '—';
+
+        return `
+          <tr onclick="showDetail('${wo.id}')" class="${selectedWorkOrder?.id === wo.id ? 'selected' : ''}">
+            <td style="max-width: 280px;">
+              <div style="font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${wo.title}</div>
+              <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">${wo.id}</div>
+            </td>
+            <td><span class="badge badge-${isOverdue ? 'overdue' : statusClass}">${isOverdue ? 'Overdue' : status}</span></td>
+            <td><span class="priority-${priorityClass}">${priority}</span></td>
+            <td style="font-size: 13px;">${wo.asset?.name || '—'}</td>
+            <td style="font-size: 13px;">${wo.location?.locationName || '—'}</td>
+            <td style="font-size: 13px; ${isOverdue ? 'color: var(--danger); font-weight: 600;' : ''}">${dueDisplay}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderBuildings() {
+      const buildingCounts = {};
+      allWorkOrders.forEach(wo => {
+        if (wo.location?.locationName) {
+          const stage = wo.workOrderStage?.name?.toLowerCase();
+          if (stage === 'open' || stage === 'in progress') {
+            buildingCounts[wo.location.locationName] = (buildingCounts[wo.location.locationName] || 0) + 1;
+          }
+        }
+      });
+
+      const sorted = Object.entries(buildingCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
+      const max = sorted[0]?.[1] || 1;
+
+      const container = document.getElementById('buildingsList');
+      container.innerHTML = sorted.map(([name, count]) => `
+        <div class="building-bar">
+          <span class="name">${name}</span>
+          <div class="bar"><div class="bar-fill" style="width: ${(count / max) * 100}%"></div></div>
+          <span class="count">${count}</span>
+        </div>
+      `).join('');
+    }
+
+    // ─── Detail Panel ──────────────────────────────────────────────────
+    function showDetail(id) {
+      selectedWorkOrder = allWorkOrders.find(wo => wo.id === id);
+      if (!selectedWorkOrder) return;
+
+      const wo = selectedWorkOrder;
+      const panel = document.getElementById('detailPanel');
+      const layout = document.getElementById('mainLayout');
+      
+      panel.classList.remove('hidden');
+      layout.classList.remove('detail-closed');
+
+      const isOverdue = wo.dueDate && new Date(wo.dueDate) < new Date() && 
+                        wo.workOrderStage?.name?.toLowerCase() !== 'completed';
+
+      document.getElementById('detailContent').innerHTML = `
+        <h2>${wo.title}</h2>
+        
+        <div class="detail-section">
+          <h3>Details</h3>
+          <div class="detail-row"><span class="label">ID</span><span class="value">${wo.id}</span></div>
+          <div class="detail-row"><span class="label">Status</span><span class="value"><span class="badge badge-${isOverdue ? 'overdue' : wo.workOrderStage?.name?.toLowerCase().replace(/\s/g, '-')}">${isOverdue ? 'OVERDUE' : wo.workOrderStage?.name}</span></span></div>
+          <div class="detail-row"><span class="label">Priority</span><span class="value priority-${(wo.severity || '').toLowerCase()}">${wo.severity || wo.executionPriority || '—'}</span></div>
+          <div class="detail-row"><span class="label">Created</span><span class="value">${new Date(wo.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span></div>
+          <div class="detail-row"><span class="label">Due</span><span class="value" style="${isOverdue ? 'color: var(--danger); font-weight: 600;' : ''}">${wo.dueDate ? new Date(wo.dueDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '—'}</span></div>
+          <div class="detail-row"><span class="label">Assigned To</span><span class="value">${wo.assignee?.name || 'Unassigned'}</span></div>
+        </div>
+
+        <div class="detail-section">
+          <h3>Description</h3>
+          <div class="detail-description">${wo.description || 'No description provided.'}</div>
+        </div>
+
+        ${wo.asset ? `
+        <div class="detail-section">
+          <h3>Linked Asset</h3>
+          <div class="detail-row"><span class="label">Name</span><span class="value">${wo.asset.name}</span></div>
+          <div class="detail-row"><span class="label">Category</span><span class="value">${wo.asset.category || '—'}</span></div>
+          <div class="detail-row"><span class="label">Status</span><span class="value">${wo.asset.status || '—'}</span></div>
+        </div>
+        ` : ''}
+
+        ${wo.location ? `
+        <div class="detail-section">
+          <h3>Location</h3>
+          <div class="detail-row"><span class="label">Building</span><span class="value">${wo.location.locationName}</span></div>
+          <div class="detail-row"><span class="label">Address</span><span class="value">${wo.location.address || '—'}</span></div>
+        </div>
+        ` : ''}
+
+        <div class="signal-section">
+          <h3>📡 Student Signal</h3>
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
+            Attach a one-line observation from lived experience to this work order.
+          </p>
+          <textarea class="signal-input" id="signalInput" placeholder="e.g., The bathroom has been closed for 2 weeks. Water near the sink every morning."></textarea>
+          <button class="signal-btn" onclick="submitSignal('${wo.id}')">Submit Signal</button>
+          <div class="signal-success" id="signalSuccess">✓ Signal submitted and linked to ${wo.id}</div>
+        </div>
+      `;
+
+      // Re-render table to show selected state
+      renderTable();
+    }
+
+    function closeDetail() {
+      document.getElementById('detailPanel').classList.add('hidden');
+      document.getElementById('mainLayout').classList.add('detail-closed');
+      selectedWorkOrder = null;
+      renderTable();
+    }
+
+    // ─── Student Signal ────────────────────────────────────────────────
+    async function submitSignal(workOrderId) {
+      const input = document.getElementById('signalInput');
+      const observation = input.value.trim();
+      
+      if (!observation) {
+        input.style.borderColor = 'var(--danger)';
+        setTimeout(() => input.style.borderColor = '', 2000);
+        return;
+      }
+
+      try {
+        await fetch(`${API_BASE}/api/signals`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            observation,
+            buildingId: selectedWorkOrder?.location?.id,
+            workOrderId,
+            studentName: 'Hackathon Participant'
+          })
+        });
+
+        document.getElementById('signalSuccess').style.display = 'block';
+        input.value = '';
+      } catch (error) {
+        // In demo mode, still show success
+        document.getElementById('signalSuccess').style.display = 'block';
+        input.value = '';
+      }
+    }
+
+    // ─── Boot ──────────────────────────────────────────────────────────
+    init();
+  
+</script>
+
+<script>
+// === CHALLENGE 2 LOGIC ===
+
 // Data
 const workOrders = [
   {
@@ -1269,7 +2200,8 @@ function recordToCriticalAsset() {
     delay += 400;
   });
 }
+
 </script>
+
 </body>
 </html>
-```
