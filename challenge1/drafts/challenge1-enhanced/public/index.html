@@ -1,336 +1,10 @@
 <!DOCTYPE html>
-<html lang="en"><head><style id="qw-theme">:root {
-  --color-bg: #faf9fc;
-  --color-text: #1a1a1a;
-  --color-navbar-bg: #f9f9fb;
-  --color-bg-chat-view: #fcfcfd;
-  --color-bg-secondary: #ffffff;
-  --color-bg-tertiary: #f9fafb;
-  --color-bg-hover: #f3f4f6;
-  --color-surface: #f9fafb;
-  --color-surface-hover: #f3f4f6;
-  --color-surface-active: #e5e7eb;
-  --color-border: rgba(0, 0, 0, .12);
-  --color-border-light: rgba(0, 0, 0, .06);
-  --color-border-strong: #d1d5db;
-  --color-primary: #4200db;
-  --color-primary-dark: #35009e;
-  --color-primary-light: #8575ff;
-  --color-primary-bg: #e8e6ff;
-  --color-primary-hover-border: #35009e;
-  --color-nav-icon-active: #4200db;
-  --color-nav-hover-border: #4200db;
-  --color-primary-alpha-3: color-mix(in srgb, #4200db 3%, transparent);
-  --color-primary-alpha-5: color-mix(in srgb, #4200db 5%, transparent);
-  --color-primary-alpha-8: color-mix(in srgb, #4200db 8%, transparent);
-  --color-primary-alpha-12: color-mix(in srgb, #4200db 12%, transparent);
-  --color-primary-alpha-15: color-mix(in srgb, #4200db 15%, transparent);
-  --color-primary-alpha-20: color-mix(in srgb, #4200db 20%, transparent);
-  --color-primary-alpha-25: color-mix(in srgb, #4200db 25%, transparent);
-  --color-primary-alpha-30: color-mix(in srgb, #4200db 30%, transparent);
-  --color-primary-alpha-40: color-mix(in srgb, #4200db 40%, transparent);
-  --color-primary-alpha-50: color-mix(in srgb, #4200db 50%, transparent);
-  --color-primary-alpha-60: color-mix(in srgb, #4200db 60%, transparent);
-  --color-primary-subtle: color-mix(in srgb, #4200db 12%, transparent);
-  --color-primary-border: color-mix(in srgb, #4200db 30%, transparent);
-  --color-focus-ring: color-mix(in srgb, #4200db 50%, transparent);
-  --color-sidebar-hover: color-mix(in srgb, #4200db 12%, transparent);
-  --color-accent: #4200db;
-  --color-accent-foreground: #4200db;
-  --color-accent-dark: #35009e;
-  --color-accent-light: #e8e6ff;
-  --color-accent-inverse: #ffffff;
-  --color-link: #4200db;
-  --color-primary-gradient-end: #e8e6ff;
-  --color-primary-bg-solid: #e8e6ff;
-  --color-user-bubble: #F3F3F7;
-  --color-text-secondary: #5e5e5e;
-  --color-text-tertiary: #656871;
-  --color-text-muted: #9ca3af;
-  --color-text-on-primary: #ffffff;
-  --color-success: #00802f;
-  --color-success-dark: #00471e;
-  --color-success-light: #d9ffd6;
-  --color-success-hover: #005c26;
-  --color-success-bg: #e6f5eb;
-  --color-success-border: #b3d9bf;
-  --color-success-foreground: #00802f;
-  --color-success-dark-foreground: #00471e;
-  --color-success-text: #00471e;
-  --color-error: #db0000;
-  --color-error-dark: #700000;
-  --color-error-light: #ffe0e0;
-  --color-error-hover: #ffe0e0;
-  --color-error-bg: #fceaea;
-  --color-error-border: #f2cccc;
-  --color-error-active-border: #db0000;
-  --color-error-foreground: #db0000;
-  --color-error-dark-foreground: #700000;
-  --color-error-inverse: #ffffff;
-  --color-error-text: #700000;
-  --color-warning: #f2b100;
-  --color-warning-dark: #573a00;
-  --color-warning-light: #fffbbd;
-  --color-warning-hover: #db9200;
-  --color-warning-bg: #fef7e6;
-  --color-warning-border: #f9dfa3;
-  --color-warning-foreground: #f2b100;
-  --color-warning-dark-foreground: #573a00;
-  --color-warning-inverse: #573a00;
-  --color-surface-warning: #fffbbd;
-  --color-text-warning: #573a00;
-  --color-info: #006ce0;
-  --color-info-dark: #002a66;
-  --color-info-light: #d1f1ff;
-  --color-info-hover: #003b8f;
-  --color-info-bg: #ebf3fc;
-  --color-info-border: #b3d1f0;
-  --color-info-foreground: #006ce0;
-  --color-info-dark-foreground: #002a66;
-  --color-info-inverse: #ffffff;
-  --color-overlay: rgba(0, 0, 0, .5);
-  --color-shadow: rgba(0, 0, 0, .08);
-  --color-hover: rgba(0, 0, 0, .05);
-  --color-tooltip-bg: rgba(0, 0, 0, .85);
-  --color-tooltip-text: #ffffff;
-  --color-voice-purple: #8575ff;
-  --color-voice-purple-dark: #4200db;
-  --color-voice-purple-light: #8575ff;
-  --color-voice-red: #db0000;
-  --color-voice-red-dark: #700000;
-  --color-voice-amber: #f2b100;
-  --color-voice-purple-glow: rgba(66, 0, 219, .4);
-  --color-voice-red-glow: rgba(219, 0, 0, .4);
-  --font-sans: "Amazon Ember", "Helvetica Neue", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: "SF Mono", "Monaco", "Menlo", "Consolas", monospace;
-  --text-2xs: .5625rem;
-  --text-xs: .625rem;
-  --text-sm: .6875rem;
-  --text-base: .75rem;
-  --text-md: .8125rem;
-  --text-lg: .875rem;
-  --text-xl: 1rem;
-  --text-2xl: 1.125rem;
-  --text-3xl: 1.25rem;
-  --text-4xl: 1.5rem;
-  --text-5xl: 2rem;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-card: 12px;
-  --radius-lg: 16px;
-  --radius-pill: 8px;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .05);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, .08);
-  --color-success-bg-solid: #d9ffd6;
-  --color-error-bg-solid: #ffe0e0;
-  --color-error-border-solid: #ffe0e0;
-  --color-warning-bg-solid: #fffbbd;
-  --color-warning-text: #573a00;
-  --color-info-bg-solid: #d1f1ff;
-  --color-info-bg-solid-alt: #d1f1ff;
-  --color-info-text: #002a66;
-  --color-info-text-alt: #002a66;
-  --color-emerald: #10b981;
-  --color-teal: #4ecdc4;
-  --color-code-bg: #F3F3F7;
-  --color-code-header-bg: #f1f3f5;
-  --color-code-text: #24292e;
-  --color-code-border: #e1e4e8;
-  --color-code-muted: #6a737d;
-  --color-inline-code-bg: #F3F3F7;
-  --color-inline-code-text: #24292e;
-  --color-inline-code-border: #e1e4e8;
-  --color-scrollbar-thumb: #d1d5db;
-  --color-scrollbar-track: transparent;
-  --color-graph-node-text: #333333;
-  --color-graph-node-text-dim: #7F8C8D;
-  --color-graph-edge-default: #95A5A6;
-  --color-graph-edge-cross: #E67E22;
-  --color-graph-edge-text: #666666;
-  --color-graph-edge-stroke: #ffffff;
-  --color-graph-highlight-bg: #FF6B6B;
-  --color-graph-highlight-border: #E74C3C;
-  --color-graph-search-bg: #FFD700;
-  --color-graph-search-border: #FFA500;
-  --color-graph-focus-border: #C0392B;
-  --color-graph-external-border: #95A5A6;
-  --color-graph-cat-file: #3498DB;
-  --color-graph-cat-folder: #7F8C8D;
-  --color-graph-cat-file-aggregate: #2980B9;
-  --color-graph-cat-class: #9B59B6;
-  --color-graph-cat-function: #2ECC71;
-  --color-graph-cat-method: #1ABC9C;
-  --color-graph-cat-variable: #F39C12;
-  --color-graph-cat-import: #D35400;
-  --color-graph-cat-module: #5B6ABF;
-  --color-graph-cat-concept: #E74C3C;
-  --color-graph-cat-person: #FF6B6B;
-  --color-graph-cat-org: #4ECDC4;
-  --color-graph-cat-organization: #4ECDC4;
-  --color-graph-cat-product: #A29BFE;
-  --color-graph-cat-metric: #FD79A8;
-  --color-graph-cat-location: #34495E;
-  --color-graph-cat-date: #E056A0;
-  --color-graph-cat-code: #3498DB;
-  --color-graph-cat-doc: #7F8C8D;
-  --color-graph-cat-url: #00B894;
-  --color-graph-cat-email: #6C5CE7;
-  --color-graph-cat-unknown: #BDC3C7;
-  --color-graph-rel-contains: #BDC3C7;
-  --color-graph-rel-extends: #9B59B6;
-  --color-graph-rel-implements: #3498DB;
-  --color-graph-rel-imports: #E67E22;
-  --color-graph-rel-uses: #2ECC71;
-  --color-graph-rel-calls: #27AE60;
-  --color-graph-rel-references: #F39C12;
-  --color-graph-rel-related-to: #95A5A6;
-  --color-graph-rel-works-on: #E74C3C;
-  --color-graph-rel-owns: #1ABC9C;
-  --color-graph-rel-depends-on: #E67E22;
-  --color-graph-rel-parent-of: #BDC3C7;
-  --qs-content: #fff;
-  --qs-main: #fff;
-  --qs-primary-foreground: #131920;
-  --qs-secondary-foreground: #656871;
-  --qs-tertiary-foreground: #9ca3af;
-  --qs-placeholder-foreground: #8c8c94;
-  --qs-divider: #dedee3;
-  --qs-default-border: #8c8c94;
-  --qs-neutral-soft: #b4b4bb;
-  --qs-neutral-gray-50: #f9fafb;
-  --qs-tertiary-background: #f9fafb;
-  --qs-action-hover: #f3f3f7;
-  --qs-primary-default: #4200db;
-  --qs-primary-dark: #35009e;
-  --qs-primary-light: #e8e6ff;
-  --qs-success-default: #00802f;
-  --qs-error-default: #db0000;
-  --qs-font-sans: "Amazon Ember", "Helvetica Neue", "Segoe UI", Helvetica, Arial, sans-serif;
-  --qs-font-family: "Amazon Ember", "Helvetica Neue", "Segoe UI", Helvetica, Arial, sans-serif;
-  --qs-font-base-letter-spacing: .15px;
-  --qs-shadow-sm: 0 0 2px 0 #00000029, 0 0 4px 0 #00000029;
-  --qs-shadow-md: 0 0 2px 0 #00000029, 0 2px 8px 1px #00000029;
-  --qs-shadow-lg: 0 4px 16px 4px #00000029, 0 2px 6px 1px #00000029;
-  --qs-shadow-xl: 0 4px 8px 2px #00000029, 0 6px 20px 4px #00000029;
-  --qs-width-modal-sm: 384px;
-  --qs-width-modal-md: 600px;
-  --qs-width-modal-lg: 1136px;
-  --qs-grid-gap: 16px;
-  --qs-grid-gap-xl: 24px;
-  --qs-primary-medium: #8575ff;
-  --qs-primary-inverse: #fff;
-  --qs-neutral-lightest: #f9f9fb;
-  --qs-neutral-light: #f3f3f7;
-  --qs-neutral-default: #dedee3;
-  --qs-neutral-medium: #8c8c94;
-  --qs-neutral-deep: #656871;
-  --qs-neutral-dark: #333843;
-  --qs-neutral-strong: #131920;
-  --qs-neutral-white: #fff;
-  --qs-neutral-black: #000;
-  --qs-success-medium: #005c26;
-  --qs-success-dark: #00471e;
-  --qs-success-light: #d9ffd6;
-  --qs-success-inverse: #fff;
-  --qs-info-default: #006ce0;
-  --qs-info-medium: #003b8f;
-  --qs-info-dark: #002a66;
-  --qs-info-light: #d1f1ff;
-  --qs-info-inverse: #fff;
-  --qs-warning-default: #f2b100;
-  --qs-warning-medium: #db9200;
-  --qs-warning-dark: #573a00;
-  --qs-warning-light: #fffbbd;
-  --qs-warning-inverse: #573a00;
-  --qs-warning-experimental: #f2b100;
-  --qs-warning-experimental-light: #fffbbd;
-  --qs-warning-experimental-light-foreground: #fffbbd;
-  --qs-error-medium: #900;
-  --qs-error-dark: #700000;
-  --qs-error-light: #ffe0e0;
-  --qs-error-inverse: #fff;
-  --qs-connection-default: #db3300;
-  --qs-connection-soft: #ff997a;
-  --qs-connection-light: #ffe0d6;
-  --qs-connection-dark: #661800;
-  --qs-automation-default: #b3008f;
-  --qs-automation-medium: #d600ba;
-  --qs-automation-soft: #ff94f1;
-  --qs-automation-light: #ffe0fb;
-  --qs-automation-dark: #660052;
-  --qs-insight-default: #a000b8;
-  --qs-insight-soft: #f299ff;
-  --qs-insight-light: #fce6ff;
-  --qs-insight-dark: #590066;
-  --qs-visualization-default: #7300e5;
-  --qs-visualization-soft: #d4a8ff;
-  --qs-visualization-light: #f2e5ff;
-  --qs-visualization-dark: #45008a;
-  --qs-spice: #ff9800;
-  --qs-coachmark: #006ce0;
-  --qs-brand: #fff;
-  --qs-brand-foreground: #131920;
-  --qs-brand-navbar: #131920;
-  --qs-brand-navbar-foreground: #fff;
-  --qs-brand-navbar-light: #dedee3;
-  --qs-brand-navbar-dark: #000;
-  --qs-application-navbar: #4200db;
-  --qs-application-navbar-foreground: #fff;
-  --qs-application-navbar-light: #e8e6ff;
-  --qs-application-navbar-dark: #35009e;
-  --qs-dimension: #4200db;
-  --qs-dimension-foreground: #fff;
-  --qs-dimension-experimental: #4200db;
-  --qs-dimension-experimental-foreground: #4200db;
-  --qs-measure: #00802f;
-  --qs-measure-foreground: #fff;
-  --qs-measure-experimental: #f2b100;
-  --qs-measure-experimental-foreground: #f2b100;
-  --qs-content-inverse: #333843;
-  --qs-content-inverse-active: #131920;
-  --qs-secondary: #dedee3;
-  --qs-disabled: #8c8c94;
-  --qs-divider-light: #f3f3f7;
-  --qs-hover-border: #333843;
-  --qs-active-border: #4200db;
-  --qs-disabled-border: #dedee3;
-  --qs-error-border: #ffe0e0;
-  --qs-error-active-border: #db0000;
-  --qs-disabled-foreground: #b4b4bb;
-  --qs-primary-inverse-foreground: #fff;
-  --qs-error-foreground: #db0000;
-  --qs-contrast-foreground: #131920;
-  --qs-main-foreground: #131920;
-  --qs-action-disabled: #f3f3f7;
-  --qs-action-active: #e8e6ff;
-  --qs-default-badge: #b4b4bb;
-  --qs-tag-default: #dedee3;
-  --qs-tag-soft-border: #b4b4bb;
-  --qs-focus-offset: 1px;
-  --qs-toggle-tile-sm: calc(.25rem * 8);
-  --qs-toggle-tile-md: calc(.25rem * 12);
-  --qs-toggle-tile-lg: calc(.25rem * 15);
-  --qs-shadow-pin-right: inset 4px 0 4px -4px #00000029;
-  --qs-shadow-pin-left: inset -4px 0 4px -4px #00000029;
-  --react-pdf-text-layer: 1;
-  --highlight-bg-color: rgba(180, 0, 170, 1);
-  --highlight-selected-bg-color: rgba(0, 100, 0, 1);
-  --react-pdf-annotation-layer: 1;
-  --annotation-unfocused-field-background: url("data:image/svg+xml;charset=UTF-8,<svg width='1px' height='1px' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' style='fill:rgba(0, 54, 255, 0.13);'/></svg>");
-  --input-focus-border-color: Highlight;
-  --input-focus-outline: 1px solid Canvas;
-  --input-unfocused-border-color: transparent;
-  --input-disabled-border-color: transparent;
-  --input-hover-border-color: black;
-  --link-outline: none;
-  color-scheme: light;
-}
-body { background: var(--color-bg); color: var(--color-text); }
-a { color: var(--color-link, var(--color-primary)); }</style>
+<html lang="en">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>345 East 15th St — School Facility Intelligence Dashboard</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -433,6 +107,18 @@ a { color: var(--color-link, var(--color-primary)); }</style>
     .signal-form select { width: 220px; }
     .signal-form input { flex: 1; }
     .signal-form button { background: var(--accent); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; font-size: 13px; }
+    .signal-form button:hover { background: #2563eb; }
+
+    /* Filters */
+    .filters { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+    .filter-group { display: flex; align-items: center; gap: 6px; }
+    .filter-group label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .filter-group select { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+    .filter-pill { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: var(--card); color: var(--muted); transition: all 0.2s; }
+    .filter-pill.active { background: var(--accent); color: white; border-color: var(--accent); }
+    .filter-pill:hover:not(.active) { border-color: var(--muted); color: var(--text); }
+    .wo-date { font-size: 10px; color: var(--muted); margin-top: 2px; }
+    .wo-count-label { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
 
     /* Speed limit markers */
     .speed-marker { background: white; border: 3px solid #333; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 12px; color: #333; }
@@ -454,9 +140,9 @@ a { color: var(--color-link, var(--color-primary)); }</style>
 <div class="tabs">
   <div class="tab active" onclick="switchTab('overview')">📊 Overview</div>
   <div class="tab" onclick="switchTab('demographics')">👥 Demographics</div>
-  <div class="tab" onclick="switchTab('environment')">🗺️ Environment &amp; Transit</div>
+  <div class="tab" onclick="switchTab('environment')">🗺️ Environment & Transit</div>
   <div class="tab" onclick="switchTab('workorders')">🔧 Work Orders</div>
-  <div class="tab" onclick="switchTab('vision')">📷 Vision &amp; Safety</div>
+  <div class="tab" onclick="switchTab('vision')">📷 Vision & Safety</div>
 </div>
 
 <!-- ===== OVERVIEW TAB ===== -->
@@ -558,7 +244,7 @@ a { color: var(--color-link, var(--color-primary)); }</style>
 <!-- ===== ENVIRONMENT & TRANSIT TAB ===== -->
 <div class="tab-content" id="tab-environment">
   <div class="panel" style="margin-bottom:20px;">
-    <div class="panel-header"><h2>🗺️ Neighborhood Map — Transit, Speed Limits &amp; Pedestrian Zones</h2></div>
+    <div class="panel-header"><h2>🗺️ Neighborhood Map — Transit, Speed Limits & Pedestrian Zones</h2></div>
     <div class="panel-body">
       <div id="map"></div>
       <div class="map-legend">
@@ -580,7 +266,7 @@ a { color: var(--color-link, var(--color-primary)); }</style>
         <div class="transit-item"><div class="transit-icon subway">🚇</div><div class="transit-info"><div class="name">14th St–Union Sq (4/5/6/N/Q/R/W)</div><div class="detail">0.3 mi · 6 min walk</div></div></div>
         <div class="transit-item"><div class="transit-icon bus">🚌</div><div class="transit-info"><div class="name">M14A — 14th St Crosstown</div><div class="detail">Stop at 1st Ave · 1 min walk</div></div></div>
         <div class="transit-item"><div class="transit-icon bus">🚌</div><div class="transit-info"><div class="name">M15 — 1st/2nd Ave Local</div><div class="detail">Stop at 15th St · 1 min walk</div></div></div>
-        <div class="transit-item"><div class="transit-icon bike">🚲</div><div class="transit-info"><div class="name">Citi Bike — E 15th &amp; Irving Pl</div><div class="detail">12 bikes available · 0.1 mi</div></div></div>
+        <div class="transit-item"><div class="transit-icon bike">🚲</div><div class="transit-info"><div class="name">Citi Bike — E 15th & Irving Pl</div><div class="detail">12 bikes available · 0.1 mi</div></div></div>
       </div>
     </div>
     <div class="panel">
@@ -601,7 +287,7 @@ a { color: var(--color-link, var(--color-primary)); }</style>
   </div>
 
   <div class="panel">
-    <div class="panel-header"><h2>🏀 Recreation &amp; Sports Facilities</h2></div>
+    <div class="panel-header"><h2>🏀 Recreation & Sports Facilities</h2></div>
     <div class="panel-body">
       <ul class="demo-list">
         <li><span>Gymnasium (indoor)</span><strong>1 — 4,200 sq ft, 2nd floor</strong></li>
@@ -622,8 +308,40 @@ a { color: var(--color-link, var(--color-primary)); }</style>
     <div class="stat-card"><div class="label">In Progress</div><div class="value" style="color:var(--accent)" id="woStatProgress">—</div></div>
     <div class="stat-card"><div class="label">Completed Today</div><div class="value" style="color:var(--low)" id="woStatDone">—</div></div>
   </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <div class="filter-group">
+      <label>Period:</label>
+      <div class="filter-pill active" onclick="setTimePeriod('all', this)">All Time</div>
+      <div class="filter-pill" onclick="setTimePeriod('today', this)">Today</div>
+      <div class="filter-pill" onclick="setTimePeriod('week', this)">This Week</div>
+      <div class="filter-pill" onclick="setTimePeriod('month', this)">This Month</div>
+    </div>
+    <div class="filter-group">
+      <label>Sort:</label>
+      <select id="sortBy" onchange="applyFilters()">
+        <option value="severity">Severity (Critical First)</option>
+        <option value="newest">Newest First</option>
+        <option value="oldest">Oldest First</option>
+        <option value="stage">By Stage</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Stage:</label>
+      <select id="filterStage" onchange="applyFilters()">
+        <option value="all">All Stages</option>
+        <option value="open">Open</option>
+        <option value="progress">In Progress</option>
+        <option value="completed">Completed</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="wo-count-label" id="woFilterCount"></div>
+
   <div class="panel">
-    <div class="panel-header"><h2>🔧 All Work Orders (Live from CriticalAsset API)</h2></div>
+    <div class="panel-header"><h2>🔧 Work Orders</h2><span id="woLiveLabel" style="font-size:11px;color:var(--muted)">Live from CriticalAsset API</span></div>
     <div class="panel-body scrollable" id="woFullList">
       <p style="color:var(--muted)">Loading from API...</p>
     </div>
@@ -685,7 +403,7 @@ a { color: var(--color-link, var(--color-primary)); }</style>
         <li><span>Crowd Density Alerts</span><strong>7 (all at dismissal)</strong></li>
         <li><span>Loitering Detections</span><strong>2</strong></li>
         <li><span>After-Hours Motion</span><strong>4 (custodial confirmed)</strong></li>
-        <li><span>Avg Response Time (security)</span><strong>&lt; 2 min</strong></li>
+        <li><span>Avg Response Time (security)</span><strong>< 2 min</strong></li>
       </ul>
     </div>
   </div>
@@ -695,6 +413,7 @@ a { color: var(--color-link, var(--color-primary)); }</style>
   // --- Tab Switching ---
   function switchTab(name) {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
     document.getElementById('tab-' + name).classList.add('active');
     event.target.classList.add('active');
@@ -739,18 +458,80 @@ a { color: var(--color-link, var(--color-primary)); }</style>
     setTimeout(() => map.invalidateSize(), 200);
   }
 
+  // --- Global state for filtering ---
+  let allWorkOrders = [];
+  let currentTimePeriod = 'all';
+
+  // --- CriticalAsset API Direct Connection ---
+  const CA_API = "https://345e15.stg.criticalasset.com/api";
+  const CLIENT_ID = "ca_4af97452ebf3cc630d6d91a8d7acc8fc";
+  const CLIENT_SECRET = "1db32fa6e9220572cc17406727aca72c4672057856e50c3d02a5a9357d1a86ab";
+
+  async function getToken() {
+    const query = `mutation { applicationClientCredentialsToken(input: { clientId: "${CLIENT_ID}", clientSecret: "${CLIENT_SECRET}", scope: "assets.read locations.read workorders.read workorders.write" }) { accessToken refreshToken tokenType expiresIn scope } }`;
+    const res = await fetch(CA_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query })
+    });
+    const data = await res.json();
+    return data.data.applicationClientCredentialsToken.accessToken;
+  }
+
+  async function fetchFromAPI(query, token) {
+    const res = await fetch(CA_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+      body: JSON.stringify({ query })
+    });
+    return await res.json();
+  }
+
   // --- Load Work Orders from API ---
   async function loadWorkOrders() {
     try {
+      // Try local backend first
       const res = await fetch('/api/dashboard');
       const data = await res.json();
       renderWorkOrders(data);
+      document.getElementById('woLiveLabel').textContent = '✓ Connected via local server';
     } catch (err) {
-      // If API isn't running, show placeholder
-      document.getElementById('statTotal').textContent = '—';
-      document.getElementById('statCritical').textContent = '—';
-      console.log('API not connected yet:', err.message);
+      // Fall back to direct API connection
+      console.log('Local server not running, trying direct API...');
+      try {
+        const token = await getToken();
+        const woQuery = `query { workOrders(limit: 50) { totalCount nodes { id title description severity executionPriority workOrderStage { name } asset { id name category status } location { id locationName } createdAt updatedAt } } }`;
+        const woResult = await fetchFromAPI(woQuery, token);
+        if (woResult.data) {
+          renderWorkOrders({ workOrders: woResult.data.workOrders });
+          document.getElementById('woLiveLabel').textContent = '✓ Connected directly to CriticalAsset API';
+        } else {
+          throw new Error(JSON.stringify(woResult.errors));
+        }
+      } catch (apiErr) {
+        console.log('Direct API also failed:', apiErr.message);
+        document.getElementById('statTotal').textContent = '—';
+        document.getElementById('statCritical').textContent = '—';
+        document.getElementById('woLiveLabel').textContent = '⚠ Cannot reach API — check network/VPN';
+        loadDemoData();
+      }
     }
+  }
+
+  // --- Demo data when API isn't available ---
+  function loadDemoData() {
+    document.getElementById('woLiveLabel').textContent = '⚠ Demo Mode — start server.js for live data';
+    const demoOrders = [
+      { id: 'WO-001', title: 'HVAC Unit #3 — Compressor Failure', severity: 'Critical', createdAt: '2026-06-05T08:30:00Z', location: { locationName: 'Roof Level' }, asset: { name: 'HVAC Unit #3' }, workOrderStage: { name: 'Open' } },
+      { id: 'WO-002', title: 'Water Leak — 2nd Floor Boys Restroom', severity: 'High', createdAt: '2026-06-04T14:20:00Z', location: { locationName: '2nd Floor' }, asset: { name: 'Plumbing' }, workOrderStage: { name: 'In Progress' } },
+      { id: 'WO-003', title: 'Broken Window — Room 204', severity: 'High', createdAt: '2026-06-03T09:15:00Z', location: { locationName: '2nd Floor, Room 204' }, asset: { name: 'Window' }, workOrderStage: { name: 'Open' } },
+      { id: 'WO-004', title: 'Elevator Inspection Overdue', severity: 'Medium', createdAt: '2026-06-01T11:00:00Z', location: { locationName: 'Main Lobby' }, asset: { name: 'Elevator' }, workOrderStage: { name: 'Open' } },
+      { id: 'WO-005', title: 'Flickering Lights — Gymnasium', severity: 'Medium', createdAt: '2026-05-28T16:45:00Z', location: { locationName: 'Gymnasium' }, asset: { name: 'Lighting' }, workOrderStage: { name: 'In Progress' } },
+      { id: 'WO-006', title: 'Playground Fence Rust — Section B', severity: 'Low', createdAt: '2026-05-25T10:00:00Z', location: { locationName: 'Outdoor Playground' }, asset: { name: 'Fencing' }, workOrderStage: { name: 'Open' } },
+      { id: 'WO-007', title: 'Fire Extinguisher Replacement — Hallway 3F', severity: 'Medium', createdAt: '2026-05-20T09:30:00Z', location: { locationName: '3rd Floor Hallway' }, asset: { name: 'Fire Safety' }, workOrderStage: { name: 'Completed' } },
+      { id: 'WO-008', title: 'Repaint Classroom 101 Walls', severity: 'Low', createdAt: '2026-05-15T13:00:00Z', location: { locationName: '1st Floor, Room 101' }, asset: { name: 'Interior' }, workOrderStage: { name: 'Completed' } },
+    ];
+    renderWorkOrders({ workOrders: { nodes: demoOrders, totalCount: demoOrders.length } });
   }
 
   function renderWorkOrders(data) {
@@ -770,11 +551,24 @@ a { color: var(--color-link, var(--color-primary)); }</style>
     document.getElementById('woStatProgress').textContent = inProgress;
     document.getElementById('woStatDone').textContent = completed;
 
-    // Sort by severity
-    const sevOrder = { critical: 0, high: 1, medium: 2, low: 3 };
-    const sorted = [...workOrders].sort((a, b) => (sevOrder[a.severity?.toLowerCase()] ?? 4) - (sevOrder[b.severity?.toLowerCase()] ?? 4));
+    // Store globally for filtering
+    allWorkOrders = workOrders;
+    applyFilters();
 
-    const renderList = (items) => items.map(wo => `
+    // Overview action items (always top 3 critical)
+    const sevOrder = { critical: 0, high: 1, medium: 2, low: 3 };
+    const topCritical = [...workOrders].sort((a, b) => (sevOrder[a.severity?.toLowerCase()] ?? 4) - (sevOrder[b.severity?.toLowerCase()] ?? 4)).slice(0, 3);
+    document.getElementById('actionItems').innerHTML = renderWOList(topCritical) || '<p style="color:var(--muted)">No critical items.</p>';
+
+    // Populate signal dropdown
+    const select = document.getElementById('signalWO');
+    select.innerHTML = '<option value="">Select work order...</option>' + workOrders.map(wo => 
+      `<option value="${wo.id}">${wo.title || wo.id} (${wo.severity})</option>`
+    ).join('');
+  }
+
+  function renderWOList(items) {
+    return items.map(wo => `
       <div class="wo-item">
         <div class="wo-severity ${wo.severity?.toLowerCase() || 'low'}"></div>
         <div>
@@ -783,18 +577,66 @@ a { color: var(--color-link, var(--color-primary)); }</style>
             <span class="wo-badge ${wo.severity?.toLowerCase()}">${wo.severity || 'N/A'}</span>
             📍 ${wo.location?.locationName || 'N/A'} · 🔧 ${wo.asset?.name || 'N/A'} · ${wo.workOrderStage?.name || ''}
           </div>
+          <div class="wo-date">${wo.createdAt ? new Date(wo.createdAt).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) : ''}</div>
         </div>
       </div>
     `).join('');
+  }
 
-    document.getElementById('woFullList').innerHTML = renderList(sorted) || '<p style="color:var(--muted)">No work orders found.</p>';
-    document.getElementById('actionItems').innerHTML = renderList(sorted.slice(0, 3)) || '<p style="color:var(--muted)">No critical items.</p>';
+  // --- Filter & Sort Logic ---
+  function setTimePeriod(period, el) {
+    currentTimePeriod = period;
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    applyFilters();
+  }
 
-    // Populate signal dropdown
-    const select = document.getElementById('signalWO');
-    select.innerHTML = '<option value="">Select work order...</option>' + sorted.map(wo => 
-      `<option value="${wo.id}">${wo.title || wo.id} (${wo.severity})</option>`
-    ).join('');
+  function applyFilters() {
+    let filtered = [...allWorkOrders];
+    
+    // Time period filter
+    const now = new Date();
+    if (currentTimePeriod === 'today') {
+      const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      filtered = filtered.filter(wo => wo.createdAt && new Date(wo.createdAt) >= startOfDay);
+    } else if (currentTimePeriod === 'week') {
+      const startOfWeek = new Date(now);
+      startOfWeek.setDate(now.getDate() - now.getDay());
+      startOfWeek.setHours(0,0,0,0);
+      filtered = filtered.filter(wo => wo.createdAt && new Date(wo.createdAt) >= startOfWeek);
+    } else if (currentTimePeriod === 'month') {
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      filtered = filtered.filter(wo => wo.createdAt && new Date(wo.createdAt) >= startOfMonth);
+    }
+
+    // Stage filter
+    const stageFilter = document.getElementById('filterStage').value;
+    if (stageFilter !== 'all') {
+      filtered = filtered.filter(wo => {
+        const stage = wo.workOrderStage?.name?.toLowerCase() || '';
+        if (stageFilter === 'open') return !stage.includes('progress') && !stage.includes('complet') && !stage.includes('closed');
+        if (stageFilter === 'progress') return stage.includes('progress');
+        if (stageFilter === 'completed') return stage.includes('complet') || stage.includes('closed');
+        return true;
+      });
+    }
+
+    // Sorting
+    const sortBy = document.getElementById('sortBy').value;
+    const sevOrder = { critical: 0, high: 1, medium: 2, low: 3 };
+    if (sortBy === 'severity') {
+      filtered.sort((a, b) => (sevOrder[a.severity?.toLowerCase()] ?? 4) - (sevOrder[b.severity?.toLowerCase()] ?? 4));
+    } else if (sortBy === 'newest') {
+      filtered.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+    } else if (sortBy === 'oldest') {
+      filtered.sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
+    } else if (sortBy === 'stage') {
+      filtered.sort((a, b) => (a.workOrderStage?.name || '').localeCompare(b.workOrderStage?.name || ''));
+    }
+
+    // Render
+    document.getElementById('woFilterCount').textContent = `Showing ${filtered.length} of ${allWorkOrders.length} work orders`;
+    document.getElementById('woFullList').innerHTML = renderWOList(filtered) || '<p style="color:var(--muted)">No work orders match your filters.</p>';
   }
 
   async function submitSignal() {
@@ -814,6 +656,5 @@ a { color: var(--color-link, var(--color-primary)); }</style>
 
   loadWorkOrders();
 </script>
-
-
-</body></html>
+</body>
+</html>
