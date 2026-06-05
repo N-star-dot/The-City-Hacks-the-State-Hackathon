@@ -1,854 +1,1027 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CriticalAsset · 345 East 15th Street Dashboard</title>
-  <style>
-    :root {
-      --bg: #0f1117;
-      --surface: #1a1d27;
-      --surface-2: #242836;
-      --border: #2e3346;
-      --text: #e4e7ef;
-      --text-muted: #8b92a8;
-      --accent: #6366f1;
-      --accent-hover: #818cf8;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --info: #3b82f6;
-      --radius: 12px;
-      --shadow: 0 4px 24px rgba(0,0,0,0.3);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Signal — Field Truth → Action</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --color-bg: #f8f9fa;
+  --color-surface: #ffffff;
+  --color-text: #1a1a2e;
+  --color-text-secondary: #44546f;
+  --color-text-muted: #8993a4;
+  --color-border: #e2e8f0;
+  --color-border-light: #f1f5f9;
+  --color-primary: #0052CC;
+  --color-primary-light: #deebff;
+  --color-success: #36b37e;
+  --color-success-bg: #e3fcef;
+  --color-error: #de350b;
+  --color-error-bg: #ffebe6;
+  --color-warning: #ff991f;
+  --color-warning-bg: #fffae6;
+  --color-info: #0065ff;
+  --color-info-bg: #e6f0ff;
+  --color-critical: #de350b;
+  --color-critical-bg: #ffebe6;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'SF Mono', Consolas, monospace;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+}
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-      min-height: 100vh;
-    }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text); line-height: 1.5; min-height: 100vh; }
 
-    /* ─── Header ─────────────────────────────────────────────────────── */
-    .header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 16px 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
+/* Header */
+.header {
+  background: linear-gradient(135deg, #0052CC 0%, #0747A6 100%);
+  color: white;
+  padding: 24px 32px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-md);
+}
+.header h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.header p { font-size: 13px; opacity: 0.85; }
+.header-flow {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.flow-step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.flow-step.active {
+  background: white;
+  color: #0052CC;
+}
+.flow-step:hover { background: rgba(255,255,255,0.3); }
+.flow-step.active:hover { background: white; }
+.flow-arrow { opacity: 0.5; font-size: 11px; }
 
-    .header h1 {
-      font-size: 18px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+/* Main layout */
+.container { max-width: 1200px; margin: 0 auto; padding: 24px; }
 
-    .header h1 .logo {
-      width: 28px;
-      height: 28px;
-      background: var(--accent);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-    }
+/* Panels */
+.panel { display: none; }
+.panel.active { display: block; }
 
-    .header .status {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      color: var(--text-muted);
-    }
+/* Cards */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s;
+}
+.card:hover { box-shadow: var(--shadow-md); }
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.card-title { font-size: 16px; font-weight: 600; }
+.card-subtitle { font-size: 13px; color: var(--color-text-secondary); margin-top: 2px; }
 
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--success);
-      animation: pulse 2s infinite;
-    }
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.badge-critical { background: var(--color-critical-bg); color: var(--color-critical); }
+.badge-high { background: var(--color-warning-bg); color: #b86e00; }
+.badge-medium { background: var(--color-info-bg); color: var(--color-info); }
+.badge-low { background: var(--color-border-light); color: var(--color-text-muted); }
+.badge-stage { background: var(--color-primary-light); color: var(--color-primary); }
+.badge-category { background: #f3e8ff; color: #7c3aed; }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
+/* Work Order Cards */
+.wo-card { cursor: pointer; border-left: 4px solid transparent; }
+.wo-card:hover { border-left-color: var(--color-primary); }
+.wo-card.selected { border-left-color: var(--color-primary); background: #f8faff; }
+.wo-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.wo-description { font-size: 14px; color: var(--color-text-secondary); margin-top: 8px; padding: 12px; background: var(--color-border-light); border-radius: var(--radius-sm); border-left: 3px solid var(--color-warning); }
+.wo-description-label { font-size: 11px; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 4px; font-weight: 600; }
+.wo-weakness { font-size: 12px; color: var(--color-error); margin-top: 8px; font-style: italic; }
 
-    /* ─── Main Layout ────────────────────────────────────────────────── */
-    .main {
-      display: grid;
-      grid-template-columns: 1fr 400px;
-      gap: 0;
-      height: calc(100vh - 65px);
-    }
+/* Field Intake */
+.intake-form { max-width: 600px; }
+.intake-field {
+  margin-bottom: 20px;
+}
+.intake-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--color-text);
+}
+.intake-hint {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+}
+textarea, input[type="text"], select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-family: var(--font-sans);
+  transition: border-color 0.2s;
+  background: var(--color-surface);
+}
+textarea:focus, input:focus, select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0,82,204,0.1);
+}
+textarea { resize: vertical; min-height: 100px; }
 
-    .main.detail-closed {
-      grid-template-columns: 1fr;
-    }
+.severity-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.severity-pill {
+  padding: 8px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 100px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--color-surface);
+}
+.severity-pill:hover { background: var(--color-border-light); }
+.severity-pill.selected { background: var(--color-primary); color: white; border-color: var(--color-primary); }
 
-    .content {
-      padding: 24px 32px;
-      overflow-y: auto;
-    }
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-sans);
+}
+.btn-primary { background: var(--color-primary); color: white; }
+.btn-primary:hover { background: #0747A6; }
+.btn-secondary { background: var(--color-border-light); color: var(--color-text); border: 1px solid var(--color-border); }
+.btn-secondary:hover { background: var(--color-border); }
+.btn-success { background: var(--color-success); color: white; }
+.btn-success:hover { background: #2d9e6b; }
+.btn-lg { padding: 14px 28px; font-size: 16px; }
 
-    /* ─── Counter Cards ──────────────────────────────────────────────── */
-    .counters {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 24px;
-    }
+/* AI Output */
+.ai-output {
+  background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%);
+  border: 1px solid #c8d6e5;
+  border-radius: var(--radius-md);
+  padding: 24px;
+  margin-top: 20px;
+}
+.ai-output h3 {
+  font-size: 14px;
+  color: var(--color-primary);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ai-field {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0,82,204,0.1);
+}
+.ai-field:last-child { border-bottom: none; }
+.ai-field-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  min-width: 140px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding-top: 2px;
+}
+.ai-field-value {
+  font-size: 14px;
+  color: var(--color-text);
+  flex: 1;
+}
 
-    .counter-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
+/* Enrichment */
+.enrichment-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.enrichment-source {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.enrichment-source i { color: var(--color-primary); }
+.enrichment-text { font-size: 14px; color: var(--color-text-secondary); line-height: 1.6; }
+.enrichment-implication {
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: var(--color-warning-bg);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: #8b5e00;
+}
 
-    .counter-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow);
-    }
+/* Workflow */
+.workflow-step {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  border-left: 3px solid var(--color-primary);
+  margin-bottom: 12px;
+  background: var(--color-surface);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.workflow-number {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.workflow-content { flex: 1; }
+.workflow-action { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.workflow-detail { font-size: 13px; color: var(--color-text-secondary); }
+.workflow-escalation {
+  background: var(--color-error-bg);
+  border: 1px solid #ffcdd2;
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin-top: 16px;
+}
+.workflow-escalation h4 { font-size: 13px; color: var(--color-error); margin-bottom: 4px; }
+.workflow-escalation p { font-size: 13px; color: var(--color-text-secondary); }
 
-    .counter-card.active {
-      border-color: var(--accent);
-      background: rgba(99, 102, 241, 0.08);
-    }
+/* Closure */
+.closure-card {
+  text-align: center;
+  padding: 40px;
+}
+.closure-icon { font-size: 48px; margin-bottom: 16px; }
+.closure-question { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+.closure-sub { font-size: 14px; color: var(--color-text-secondary); margin-bottom: 24px; }
+.closure-options { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.closure-option {
+  padding: 16px 24px;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 140px;
+}
+.closure-option:hover { border-color: var(--color-primary); background: var(--color-primary-light); }
+.closure-option.selected { border-color: var(--color-primary); background: var(--color-primary-light); }
+.closure-option i { font-size: 24px; margin-bottom: 8px; display: block; }
+.closure-option span { font-size: 14px; font-weight: 600; display: block; }
+.closure-option small { font-size: 12px; color: var(--color-text-muted); display: block; margin-top: 4px; }
 
-    .counter-card .label {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
+/* Loading animation */
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  color: var(--color-primary);
+  font-size: 14px;
+}
+.loading-dots span {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1.0); }
+}
 
-    .counter-card .value {
-      font-size: 32px;
-      font-weight: 700;
-    }
+/* Section headers */
+.section-header {
+  margin-bottom: 20px;
+}
+.section-header h2 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.section-header p { font-size: 14px; color: var(--color-text-secondary); }
 
-    .counter-card .sublabel {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
+/* Responsive */
+@media (max-width: 768px) {
+  .container { padding: 16px; }
+  .header { padding: 16px; }
+  .card { padding: 16px; }
+  .header-flow { gap: 4px; }
+  .flow-step { font-size: 11px; padding: 3px 8px; }
+}
 
-    .counter-card.open .value { color: var(--info); }
-    .counter-card.progress .value { color: var(--warning); }
-    .counter-card.overdue .value { color: var(--danger); }
-    .counter-card.total .value { color: var(--text); }
+/* Animations */
+@media (prefers-reduced-motion: no-preference) {
+  .fade-in { animation: fadeIn 0.4s ease-out both; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+}
 
-    /* ─── Filters ────────────────────────────────────────────────────── */
-    .toolbar {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 20px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
+.hidden { display: none; }
 
-    .filter-btn {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px 14px;
-      font-size: 13px;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.15s;
-    }
+/* Photo upload */
+.photo-upload {
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.photo-upload:hover { border-color: var(--color-primary); background: var(--color-primary-light); }
+.photo-upload i { font-size: 24px; color: var(--color-text-muted); margin-bottom: 8px; }
+.photo-upload p { font-size: 13px; color: var(--color-text-muted); }
 
-    .filter-btn:hover { border-color: var(--accent); color: var(--text); }
-    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-
-    .search-input {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px 14px;
-      font-size: 13px;
-      color: var(--text);
-      width: 250px;
-      outline: none;
-      margin-left: auto;
-    }
-
-    .search-input:focus { border-color: var(--accent); }
-    .search-input::placeholder { color: var(--text-muted); }
-
-    /* ─── Table ──────────────────────────────────────────────────────── */
-    .table-container {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    thead th {
-      padding: 12px 16px;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
-      text-align: left;
-      background: var(--surface-2);
-      border-bottom: 1px solid var(--border);
-      font-weight: 600;
-    }
-
-    tbody tr {
-      cursor: pointer;
-      transition: background 0.1s;
-    }
-
-    tbody tr:hover {
-      background: var(--surface-2);
-    }
-
-    tbody tr.selected {
-      background: rgba(99, 102, 241, 0.1);
-    }
-
-    tbody td {
-      padding: 14px 16px;
-      font-size: 14px;
-      border-bottom: 1px solid var(--border);
-      vertical-align: middle;
-    }
-
-    /* ─── Badges ─────────────────────────────────────────────────────── */
-    .badge {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-    }
-
-    .badge-open { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
-    .badge-to-do { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
-    .badge-in-progress { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
-    .badge-completed { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-    .badge-overdue { background: rgba(239, 68, 68, 0.15); color: #f87171; }
-    .badge-cancelled { background: rgba(107, 114, 128, 0.15); color: #9ca3af; }
-
-    .priority-high { color: var(--danger); font-weight: 600; }
-    .priority-medium { color: var(--warning); }
-    .priority-low { color: var(--text-muted); }
-
-    /* ─── Detail Panel ───────────────────────────────────────────────── */
-    .detail-panel {
-      background: var(--surface);
-      border-left: 1px solid var(--border);
-      overflow-y: auto;
-      padding: 24px;
-    }
-
-    .detail-panel.hidden { display: none; }
-
-    .detail-close {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-size: 20px;
-      cursor: pointer;
-      float: right;
-      padding: 4px 8px;
-      border-radius: 6px;
-    }
-
-    .detail-close:hover { background: var(--surface-2); color: var(--text); }
-
-    .detail-panel h2 {
-      font-size: 18px;
-      margin-bottom: 20px;
-      padding-right: 40px;
-    }
-
-    .detail-section {
-      margin-bottom: 20px;
-    }
-
-    .detail-section h3 {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
-
-    .detail-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 13px;
-    }
-
-    .detail-row .label { color: var(--text-muted); }
-    .detail-row .value { font-weight: 500; }
-
-    .detail-description {
-      font-size: 14px;
-      line-height: 1.6;
-      color: var(--text-muted);
-      padding: 12px;
-      background: var(--surface-2);
-      border-radius: 8px;
-    }
-
-    /* ─── Student Signal ─────────────────────────────────────────────── */
-    .signal-section {
-      margin-top: 24px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
-    }
-
-    .signal-section h3 {
-      font-size: 14px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .signal-input {
-      width: 100%;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      font-size: 14px;
-      color: var(--text);
-      resize: vertical;
-      min-height: 80px;
-      outline: none;
-      font-family: inherit;
-    }
-
-    .signal-input:focus { border-color: var(--accent); }
-
-    .signal-btn {
-      margin-top: 10px;
-      background: var(--accent);
-      border: none;
-      border-radius: 8px;
-      padding: 10px 20px;
-      font-size: 14px;
-      color: #fff;
-      cursor: pointer;
-      font-weight: 500;
-      transition: background 0.15s;
-      width: 100%;
-    }
-
-    .signal-btn:hover { background: var(--accent-hover); }
-
-    .signal-success {
-      margin-top: 10px;
-      padding: 10px;
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      border-radius: 8px;
-      font-size: 13px;
-      color: var(--success);
-      display: none;
-    }
-
-    /* ─── Building Summary ───────────────────────────────────────────── */
-    .buildings-section {
-      margin-top: 24px;
-    }
-
-    .building-bar {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .building-bar .name {
-      flex: 1;
-      font-size: 13px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .building-bar .bar {
-      width: 100px;
-      height: 6px;
-      background: var(--surface-2);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-
-    .building-bar .bar-fill {
-      height: 100%;
-      background: var(--accent);
-      border-radius: 3px;
-      transition: width 0.3s;
-    }
-
-    .building-bar .count {
-      font-size: 12px;
-      font-weight: 600;
-      min-width: 24px;
-      text-align: right;
-    }
-
-    /* ─── Loading State ──────────────────────────────────────────────── */
-    .loading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px;
-      color: var(--text-muted);
-    }
-
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid var(--border);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-bottom: 16px;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .error-state {
-      padding: 40px;
-      text-align: center;
-      color: var(--danger);
-    }
-
-    /* ─── Responsive ─────────────────────────────────────────────────── */
-    @media (max-width: 1024px) {
-      .main { grid-template-columns: 1fr; }
-      .detail-panel { 
-        position: fixed; 
-        right: 0; 
-        top: 65px; 
-        bottom: 0; 
-        width: 400px;
-        box-shadow: -4px 0 24px rgba(0,0,0,0.4);
-        z-index: 50;
-      }
-      .counters { grid-template-columns: repeat(2, 1fr); }
-    }
-  </style>
+/* Summary card */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.summary-stat {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  text-align: center;
+}
+.summary-stat .value { font-size: 28px; font-weight: 700; font-family: var(--font-mono); color: var(--color-primary); }
+.summary-stat .label { font-size: 11px; color: var(--color-text-muted); text-transform: uppercase; margin-top: 4px; }
+</style>
 </head>
 <body>
-  <!-- Header -->
-  <div class="header">
-    <h1>
-      <span class="logo">CA</span>
-      345 E 15th St · Work Orders
-    </h1>
-    <div class="status">
-      <span class="status-dot"></span>
-      <span id="connectionStatus">Connecting...</span>
+
+<div class="header">
+  <h1><i class="fa-solid fa-bolt"></i> Student Signal</h1>
+  <p>345 East 15th Street — Field Truth → Evidence → Action → Verification</p>
+  <div class="header-flow">
+    <div class="flow-step active" onclick="showPanel('select')" id="step-select">
+      <i class="fa-solid fa-clipboard-list"></i> Select Work Order
+    </div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step" onclick="showPanel('report')" id="step-report">
+      <i class="fa-solid fa-eye"></i> Report What You See
+    </div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step" onclick="showPanel('ai')" id="step-ai">
+      <i class="fa-solid fa-brain"></i> AI Structuring
+    </div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step" onclick="showPanel('enrich')" id="step-enrich">
+      <i class="fa-solid fa-database"></i> Enrichment
+    </div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step" onclick="showPanel('workflow')" id="step-workflow">
+      <i class="fa-solid fa-route"></i> Workflow
+    </div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step" onclick="showPanel('closure')" id="step-closure">
+      <i class="fa-solid fa-circle-check"></i> Verify
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <!-- PANEL 1: Work Order Selection -->
+  <div class="panel active" id="panel-select">
+    <div class="section-header">
+      <h2>Active Work Orders</h2>
+      <p>Select a work order to investigate — look for weak descriptions, missing context, or recurring issues.</p>
+    </div>
+
+    <div class="summary-grid">
+      <div class="summary-stat">
+        <div class="value">3</div>
+        <div class="label">Open Work Orders</div>
+      </div>
+      <div class="summary-stat">
+        <div class="value">1</div>
+        <div class="label">Critical</div>
+      </div>
+      <div class="summary-stat">
+        <div class="value">0</div>
+        <div class="label">Overdue</div>
+      </div>
+    </div>
+
+    <div class="card wo-card" onclick="selectWorkOrder(0)" id="wo-0">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Annual Steam System Inspection</div>
+          <div class="card-subtitle">345 East 15th Street — Mechanical Room</div>
+        </div>
+        <span class="badge badge-high">HIGH</span>
+      </div>
+      <div class="wo-meta">
+        <span class="badge badge-stage"><i class="fa-solid fa-circle"></i> To Do</span>
+        <span class="badge badge-category">HVAC</span>
+        <span class="badge badge-low">Preventive</span>
+      </div>
+      <div class="wo-description">
+        <div class="wo-description-label">Current Description</div>
+        Perform comprehensive annual inspection of the steam pressure reducing valve station and safety relief valves.
+      </div>
+      <div class="wo-weakness"><i class="fa-solid fa-triangle-exclamation"></i> Missing: specific valve locations, last inspection date, known issues from operators, condition notes from students/custodians</div>
+    </div>
+
+    <div class="card wo-card" onclick="selectWorkOrder(1)" id="wo-1">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Electrical Distribution Panel Preventive Maintenance</div>
+          <div class="card-subtitle">345 East 15th Street — Electrical Room</div>
+        </div>
+        <span class="badge badge-medium">MEDIUM</span>
+      </div>
+      <div class="wo-meta">
+        <span class="badge badge-stage"><i class="fa-solid fa-circle"></i> To Do</span>
+        <span class="badge badge-category">Electrical</span>
+        <span class="badge badge-low">Preventive</span>
+      </div>
+      <div class="wo-description">
+        <div class="wo-description-label">Current Description</div>
+        Conduct thermal imaging and tighten connections on main switchboard and distribution panels.
+      </div>
+      <div class="wo-weakness"><i class="fa-solid fa-triangle-exclamation"></i> Missing: which panels, which floor, any reported flickering/outages, student observations about power issues</div>
+    </div>
+
+    <div class="card wo-card" onclick="selectWorkOrder(2)" id="wo-2">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Emergency Exit Sign & Lighting Test</div>
+          <div class="card-subtitle">345 East 15th Street — All Floors</div>
+        </div>
+        <span class="badge badge-critical">CRITICAL</span>
+      </div>
+      <div class="wo-meta">
+        <span class="badge badge-stage"><i class="fa-solid fa-circle"></i> To Do</span>
+        <span class="badge badge-category">Fire & Life Safety</span>
+        <span class="badge badge-low">Preventive</span>
+      </div>
+      <div class="wo-description">
+        <div class="wo-description-label">Current Description</div>
+        Perform mandatory emergency exit signage and battery unit discharge test.
+      </div>
+      <div class="wo-weakness"><i class="fa-solid fa-triangle-exclamation"></i> Missing: which signs are dim/out, stairwell observations, blocked exits, student reports of dark areas</div>
+    </div>
+
+    <div style="margin-top: 20px; padding: 16px; background: var(--color-info-bg); border-radius: var(--radius-sm);">
+      <p style="font-size: 13px; color: var(--color-info);"><i class="fa-solid fa-info-circle"></i> <strong>Or report a new issue:</strong> Skip the work order selection and go directly to <a href="#" onclick="showPanel('report'); return false;" style="color: var(--color-primary);">Report What You See</a> to submit a new field observation.</p>
     </div>
   </div>
 
-  <!-- Main Layout -->
-  <div class="main detail-closed" id="mainLayout">
-    <!-- Content Area -->
-    <div class="content">
-      <!-- Counter Cards -->
-      <div class="counters">
-        <div class="counter-card open" data-filter="open" onclick="filterByStatus('open')">
-          <div class="label">Open</div>
-          <div class="value" id="countOpen">—</div>
-          <div class="sublabel">Awaiting action</div>
-        </div>
-        <div class="counter-card progress" data-filter="in_progress" onclick="filterByStatus('in_progress')">
-          <div class="label">In Progress</div>
-          <div class="value" id="countProgress">—</div>
-          <div class="sublabel">Being worked on</div>
-        </div>
-        <div class="counter-card overdue" data-filter="overdue" onclick="filterByStatus('overdue')">
-          <div class="label">Overdue</div>
-          <div class="value" id="countOverdue">—</div>
-          <div class="sublabel">Past due date</div>
-        </div>
-        <div class="counter-card total" data-filter="all" onclick="filterByStatus('all')">
-          <div class="label">Total</div>
-          <div class="value" id="countTotal">—</div>
-          <div class="sublabel">All work orders</div>
-        </div>
-      </div>
-
-      <!-- Filters -->
-      <div class="toolbar">
-        <button class="filter-btn active" data-priority="all" onclick="filterByPriority('all')">All Priorities</button>
-        <button class="filter-btn" data-priority="high" onclick="filterByPriority('high')">🔴 High</button>
-        <button class="filter-btn" data-priority="medium" onclick="filterByPriority('medium')">🟡 Medium</button>
-        <button class="filter-btn" data-priority="low" onclick="filterByPriority('low')">🟢 Low</button>
-        <input type="text" class="search-input" placeholder="Search work orders..." oninput="searchWorkOrders(this.value)">
-      </div>
-
-      <!-- Table -->
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Status</th>
-              <th>Priority</th>
-              <th>Asset</th>
-              <th>Location</th>
-              <th>Due Date</th>
-            </tr>
-          </thead>
-          <tbody id="workOrderTable">
-            <tr>
-              <td colspan="6">
-                <div class="loading">
-                  <div class="spinner"></div>
-                  <span>Loading work orders...</span>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Top Buildings by Open Work Orders -->
-      <div class="buildings-section">
-        <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin: 20px 0 12px;">Top Buildings by Open Work Orders</h3>
-        <div id="buildingsList"></div>
-      </div>
+  <!-- PANEL 2: Student/Field Intake -->
+  <div class="panel" id="panel-report">
+    <div class="section-header">
+      <h2><i class="fa-solid fa-eye"></i> Report What You See</h2>
+      <p>Tell us what's happening — one sentence is enough. AI handles the rest.</p>
     </div>
 
-    <!-- Detail Panel -->
-    <div class="detail-panel hidden" id="detailPanel">
-      <button class="detail-close" onclick="closeDetail()">&times;</button>
-      <div id="detailContent"></div>
+    <div id="selected-wo-context" class="card hidden" style="border-left: 4px solid var(--color-primary); margin-bottom: 20px;">
+      <div style="font-size: 12px; color: var(--color-text-muted); text-transform: uppercase; font-weight: 600;">Linked Work Order</div>
+      <div id="selected-wo-title" style="font-size: 15px; font-weight: 600; margin-top: 4px;"></div>
+    </div>
+
+    <div class="intake-form">
+      <div class="intake-field">
+        <label class="intake-label">What did you see, feel, or experience?</label>
+        <div class="intake-hint">Describe the issue in your own words — be as specific as you can.</div>
+        <textarea id="observation-text" placeholder="e.g. The exit sign on the 3rd floor stairwell near room 312 has been completely dark for two weeks. The stairwell is really hard to see in at night and during fire drills."></textarea>
+      </div>
+
+      <div class="intake-field">
+        <label class="intake-label">Where exactly?</label>
+        <div class="intake-hint">Floor, room number, hallway, stairwell — anything helps.</div>
+        <input type="text" id="observation-location" placeholder="e.g. 3rd floor stairwell B, near room 312">
+      </div>
+
+      <div class="intake-field">
+        <label class="intake-label">How disruptive is this?</label>
+        <div class="severity-pills">
+          <div class="severity-pill" onclick="selectSeverity(this, 'low')">Low — Annoying but livable</div>
+          <div class="severity-pill" onclick="selectSeverity(this, 'medium')">Medium — Affecting daily use</div>
+          <div class="severity-pill selected" onclick="selectSeverity(this, 'high')">High — Safety concern</div>
+          <div class="severity-pill" onclick="selectSeverity(this, 'critical')">Critical — Immediate danger</div>
+        </div>
+      </div>
+
+      <div class="intake-field">
+        <label class="intake-label">Is this still happening?</label>
+        <div class="severity-pills">
+          <div class="severity-pill selected" onclick="selectStillHappening(this, 'yes')">Yes — Right now</div>
+          <div class="severity-pill" onclick="selectStillHappening(this, 'recurring')">Recurring — Comes and goes</div>
+          <div class="severity-pill" onclick="selectStillHappening(this, 'no')">No — It stopped</div>
+        </div>
+      </div>
+
+      <div class="intake-field">
+        <label class="intake-label">Add a photo (optional)</label>
+        <div class="photo-upload">
+          <i class="fa-solid fa-camera"></i>
+          <p>Tap to take a photo or upload</p>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-lg" onclick="runAIStructuring()">
+        <i class="fa-solid fa-brain"></i> Analyze with AI
+      </button>
     </div>
   </div>
 
-  <script>
-    // ─── State ─────────────────────────────────────────────────────────
-    let allWorkOrders = [];
-    let filteredWorkOrders = [];
-    let currentFilter = { status: 'all', priority: 'all', search: '' };
-    let selectedWorkOrder = null;
+  <!-- PANEL 3: AI Structuring -->
+  <div class="panel" id="panel-ai">
+    <div class="section-header">
+      <h2><i class="fa-solid fa-brain"></i> AI-Structured Intelligence</h2>
+      <p>Your observation transformed into actionable operational data.</p>
+    </div>
 
-    // ─── API Base URL ──────────────────────────────────────────────────
-    const API_BASE = window.location.origin;
+    <div id="ai-loading" class="loading hidden">
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+      <span>AI is analyzing your observation...</span>
+    </div>
 
-    // ─── Initialize ────────────────────────────────────────────────────
-    async function init() {
-      try {
-        // Check health
-        const health = await fetch(`${API_BASE}/api/health`).then(r => r.json());
-        
-        if (!health.hasCredentials) {
-          document.getElementById('connectionStatus').textContent = '⚠️ No credentials configured';
-          document.getElementById('connectionStatus').style.color = '#f59e0b';
-          // Load demo data for development
-          loadDemoData();
-          return;
-        }
+    <div id="ai-results" class="hidden">
+      <div class="ai-output">
+        <h3><i class="fa-solid fa-wand-magic-sparkles"></i> Structured Issue Record</h3>
+        <div id="ai-structured-fields"></div>
+      </div>
 
-        document.getElementById('connectionStatus').textContent = 'Connected to CriticalAsset';
-        
-        // Fetch work orders
-        const data = await fetch(`${API_BASE}/api/workorders?limit=100`).then(r => r.json());
-        
-        if (data.error) {
-          throw new Error(data.error);
-        }
+      <div class="ai-output" style="margin-top: 16px;">
+        <h3><i class="fa-solid fa-file-lines"></i> Enhanced Work Order Description</h3>
+        <p id="ai-enhanced-description" style="font-size: 14px; line-height: 1.7; color: var(--color-text);"></p>
+      </div>
 
-        allWorkOrders = data.nodes || [];
-        applyFilters();
-      } catch (error) {
-        console.error('Init error:', error);
-        document.getElementById('connectionStatus').textContent = 'Demo Mode';
-        document.getElementById('connectionStatus').style.color = '#f59e0b';
-        loadDemoData();
-      }
-    }
+      <div style="margin-top: 20px; display: flex; gap: 12px;">
+        <button class="btn btn-primary" onclick="showPanel('enrich')">
+          <i class="fa-solid fa-database"></i> Enrich with Public Data
+        </button>
+        <button class="btn btn-secondary" onclick="showPanel('report')">
+          <i class="fa-solid fa-pen"></i> Edit Observation
+        </button>
+      </div>
+    </div>
+  </div>
 
-    // ─── Demo Data ─────────────────────────────────────────────────────
-    function loadDemoData() {
-      allWorkOrders = [
-        { id: 'ee4cacef-08e3-58e6-a94f-e0ff32c5e6f5', title: 'Annual Steam System Inspection', description: 'Perform comprehensive annual inspection of the steam pressure reducing valve station and safety relief valves.', severity: 'high', executionPriority: 'high', workOrderStage: { name: 'To Do' }, workOrderServiceCategory: 'hvac', createdAt: '2026-05-30T09:00:00Z', dueDate: '2026-06-10T17:00:00Z', asset: { id: '602454ae-2f73-5e90-a688-87945cc0b6e8', name: 'Steam Pressure Reducing Valve Station', category: 'HVAC / Steam', status: 'active' }, location: { id: '6bbaf32c-707e-5bae-a59e-447e8aff1efc', locationName: '345 East 15th Street', address: '345 E 15th St, New York, NY' }, assignee: { id: 'U-01', name: 'Assigned Tech' } },
-        { id: '29c750cd-7929-524a-ab7c-b3e1e965b0fd', title: 'Electrical Distribution Panel Preventive Maintenance', description: 'Conduct thermal imaging and tighten connections on main switchboard and distribution panels.', severity: 'medium', executionPriority: 'medium', workOrderStage: { name: 'To Do' }, workOrderServiceCategory: 'electrical', createdAt: '2026-05-30T09:00:00Z', dueDate: '2026-06-07T17:00:00Z', asset: { id: '1ac4e575-2686-503e-a9b7-20df593ae553', name: 'Main Switchboard', category: 'Electrical', status: 'active' }, location: { id: '6bbaf32c-707e-5bae-a59e-447e8aff1efc', locationName: '345 East 15th Street', address: '345 E 15th St, New York, NY' }, assignee: { id: 'U-02', name: 'Assigned Tech' } },
-        { id: 'c5338071-972b-5dc2-a676-cefade0b4838', title: 'Emergency Exit Sign & Lighting Test', description: 'Perform mandatory emergency exit signage and battery unit discharge test.', severity: 'critical', executionPriority: 'critical', workOrderStage: { name: 'To Do' }, workOrderServiceCategory: 'fire_and_life_safety', createdAt: '2026-05-30T09:00:00Z', dueDate: '2026-06-15T17:00:00Z', asset: { id: 'b082f439-6d72-5e2f-a3ff-371db1aac811', name: 'Exit Sign', category: 'Fire & Life Safety', status: 'active' }, location: { id: '6bbaf32c-707e-5bae-a59e-447e8aff1efc', locationName: '345 East 15th Street', address: '345 E 15th St, New York, NY' }, assignee: { id: 'U-03', name: 'Assigned Tech' } },
-      ];
-      applyFilters();
-    }
+  <!-- PANEL 4: Public Data Enrichment -->
+  <div class="panel" id="panel-enrich">
+    <div class="section-header">
+      <h2><i class="fa-solid fa-database"></i> Public Data Enrichment</h2>
+      <p>External context that makes this issue operationally meaningful.</p>
+    </div>
 
-    // ─── Filtering ─────────────────────────────────────────────────────
-    function applyFilters() {
-      const now = new Date();
-      
-      filteredWorkOrders = allWorkOrders.filter(wo => {
-        // Status filter
-        if (currentFilter.status !== 'all') {
-          const stage = wo.workOrderStage?.name?.toLowerCase().replace(/\s/g, '_') || 'open';
-          if (currentFilter.status === 'overdue') {
-            if (!wo.dueDate || new Date(wo.dueDate) >= now) return false;
-            if (stage === 'completed' || stage === 'cancelled') return false;
-          } else if (currentFilter.status === 'open' && stage !== 'open' && stage !== 'to_do' && stage !== 'to do') {
-            return false;
-          } else if (currentFilter.status === 'in_progress' && stage !== 'in_progress' && stage !== 'in progress') {
-            return false;
-          }
-        }
+    <div id="enrichment-loading" class="loading">
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+      <span>Searching NYC public records for 345 East 15th Street...</span>
+    </div>
 
-        // Priority filter
-        if (currentFilter.priority !== 'all') {
-          const priority = (wo.severity || wo.executionPriority || '').toLowerCase();
-          if (currentFilter.priority === 'high' && priority !== 'high' && priority !== 'critical') return false;
-          if (currentFilter.priority === 'medium' && priority !== 'medium') return false;
-          if (currentFilter.priority === 'low' && priority !== 'low') return false;
-        }
+    <div id="enrichment-results" class="hidden">
+      <div id="enrichment-cards"></div>
+      <div style="margin-top: 20px;">
+        <button class="btn btn-primary" onclick="showPanel('workflow')">
+          <i class="fa-solid fa-route"></i> Generate Workflow
+        </button>
+      </div>
+    </div>
+  </div>
 
-        // Search filter
-        if (currentFilter.search) {
-          const search = currentFilter.search.toLowerCase();
-          const searchable = [
-            wo.title, wo.description, wo.asset?.name, wo.asset?.category,
-            wo.location?.locationName, wo.assignee?.name
-          ].filter(Boolean).join(' ').toLowerCase();
-          if (!searchable.includes(search)) return false;
-        }
+  <!-- PANEL 5: Workflow Recommendation -->
+  <div class="panel" id="panel-workflow">
+    <div class="section-header">
+      <h2><i class="fa-solid fa-route"></i> Recommended Workflow</h2>
+      <p>What the operator should do next — prioritized and compliance-aware.</p>
+    </div>
 
-        return true;
-      });
+    <div id="workflow-steps"></div>
+    <div id="workflow-escalation"></div>
 
-      renderCounters();
-      renderTable();
-      renderBuildings();
-    }
+    <div class="card" style="margin-top: 20px; background: var(--color-success-bg); border-color: var(--color-success);">
+      <h4 style="font-size: 14px; color: var(--color-success); margin-bottom: 8px;"><i class="fa-solid fa-user"></i> Student-Facing Status</h4>
+      <p id="student-status" style="font-size: 14px; color: var(--color-text);">Your report has been received and linked to an active work order. A maintenance team member will inspect within 48 hours. You'll be asked to confirm whether the issue is resolved.</p>
+    </div>
 
-    function filterByStatus(status) {
-      currentFilter.status = status;
-      document.querySelectorAll('.counter-card').forEach(c => c.classList.remove('active'));
-      document.querySelector(`.counter-card[data-filter="${status}"]`)?.classList.add('active');
-      applyFilters();
-    }
+    <div style="margin-top: 20px;">
+      <button class="btn btn-success btn-lg" onclick="showPanel('closure')">
+        <i class="fa-solid fa-circle-check"></i> Submit & Start Verification
+      </button>
+    </div>
+  </div>
 
-    function filterByPriority(priority) {
-      currentFilter.priority = priority;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      document.querySelector(`.filter-btn[data-priority="${priority}"]`)?.classList.add('active');
-      applyFilters();
-    }
+  <!-- PANEL 6: Closure Verification -->
+  <div class="panel" id="panel-closure">
+    <div class="section-header">
+      <h2><i class="fa-solid fa-circle-check"></i> Closure Verification</h2>
+      <p>Did reality change? Only you know.</p>
+    </div>
 
-    function searchWorkOrders(query) {
-      currentFilter.search = query;
-      applyFilters();
-    }
-
-    // ─── Render Functions ──────────────────────────────────────────────
-    function renderCounters() {
-      const now = new Date();
-      const openStatuses = ['open', 'to do', 'to_do'];
-      const open = allWorkOrders.filter(wo => openStatuses.includes(wo.workOrderStage?.name?.toLowerCase())).length;
-      const inProgress = allWorkOrders.filter(wo => ['in progress', 'in_progress'].includes(wo.workOrderStage?.name?.toLowerCase())).length;
-      const overdue = allWorkOrders.filter(wo => {
-        const stage = wo.workOrderStage?.name?.toLowerCase();
-        return wo.dueDate && new Date(wo.dueDate) < now && stage !== 'completed' && stage !== 'cancelled' && stage !== 'done';
-      }).length;
-
-      document.getElementById('countOpen').textContent = open;
-      document.getElementById('countProgress').textContent = inProgress;
-      document.getElementById('countOverdue').textContent = overdue;
-      document.getElementById('countTotal').textContent = allWorkOrders.length;
-    }
-
-    function renderTable() {
-      const tbody = document.getElementById('workOrderTable');
-      
-      if (filteredWorkOrders.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);">No work orders match the current filters.</td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = filteredWorkOrders.map(wo => {
-        const status = wo.workOrderStage?.name || 'Unknown';
-        const statusClass = status.toLowerCase().replace(/\s/g, '-');
-        const priority = wo.severity || wo.executionPriority || 'Unknown';
-        const priorityClass = priority.toLowerCase() === 'critical' ? 'high' : priority.toLowerCase();
-        const isOverdue = wo.dueDate && new Date(wo.dueDate) < new Date() && statusClass !== 'completed';
-        const dueDisplay = wo.dueDate ? new Date(wo.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '—';
-
-        return `
-          <tr onclick="showDetail('${wo.id}')" class="${selectedWorkOrder?.id === wo.id ? 'selected' : ''}">
-            <td style="max-width: 280px;">
-              <div style="font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${wo.title}</div>
-              <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">${wo.id}</div>
-            </td>
-            <td><span class="badge badge-${isOverdue ? 'overdue' : statusClass}">${isOverdue ? 'Overdue' : status}</span></td>
-            <td><span class="priority-${priorityClass}">${priority}</span></td>
-            <td style="font-size: 13px;">${wo.asset?.name || '—'}</td>
-            <td style="font-size: 13px;">${wo.location?.locationName || '—'}</td>
-            <td style="font-size: 13px; ${isOverdue ? 'color: var(--danger); font-weight: 600;' : ''}">${dueDisplay}</td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function renderBuildings() {
-      const buildingCounts = {};
-      allWorkOrders.forEach(wo => {
-        if (wo.location?.locationName) {
-          const stage = wo.workOrderStage?.name?.toLowerCase();
-          if (stage === 'open' || stage === 'in progress') {
-            buildingCounts[wo.location.locationName] = (buildingCounts[wo.location.locationName] || 0) + 1;
-          }
-        }
-      });
-
-      const sorted = Object.entries(buildingCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
-      const max = sorted[0]?.[1] || 1;
-
-      const container = document.getElementById('buildingsList');
-      container.innerHTML = sorted.map(([name, count]) => `
-        <div class="building-bar">
-          <span class="name">${name}</span>
-          <div class="bar"><div class="bar-fill" style="width: ${(count / max) * 100}%"></div></div>
-          <span class="count">${count}</span>
+    <div class="card closure-card">
+      <div class="closure-icon">🔍</div>
+      <div class="closure-question">Has this issue been resolved?</div>
+      <div class="closure-sub">Your confirmation prevents false closures and keeps the system honest.</div>
+      <div class="closure-options">
+        <div class="closure-option" onclick="selectClosure(this, 'fixed')">
+          <i class="fa-solid fa-circle-check" style="color: var(--color-success);"></i>
+          <span>Yes — Fixed</span>
+          <small>The problem is gone</small>
         </div>
-      `).join('');
+        <div class="closure-option" onclick="selectClosure(this, 'partial')">
+          <i class="fa-solid fa-circle-half-stroke" style="color: var(--color-warning);"></i>
+          <span>Partially</span>
+          <small>Better but not fully resolved</small>
+        </div>
+        <div class="closure-option" onclick="selectClosure(this, 'no')">
+          <i class="fa-solid fa-circle-xmark" style="color: var(--color-error);"></i>
+          <span>No — Still Broken</span>
+          <small>Nothing changed</small>
+        </div>
+        <div class="closure-option" onclick="selectClosure(this, 'worse')">
+          <i class="fa-solid fa-arrow-trend-up" style="color: var(--color-critical);"></i>
+          <span>Worse</span>
+          <small>It got worse since I reported</small>
+        </div>
+      </div>
+    </div>
+
+    <div id="closure-result" class="hidden" style="margin-top: 16px;">
+      <div class="card" style="border-left: 4px solid var(--color-primary);">
+        <h4 style="margin-bottom: 8px;"><i class="fa-solid fa-paper-plane"></i> Verification Submitted</h4>
+        <p id="closure-result-text" style="font-size: 14px; color: var(--color-text-secondary);"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Data
+const workOrders = [
+  {
+    id: "ee4cacef-08e3-58e6-a94f-e0ff32c5e6f5",
+    title: "Annual Steam System Inspection",
+    description: "Perform comprehensive annual inspection of the steam pressure reducing valve station and safety relief valves.",
+    severity: "high",
+    priority: "high",
+    type: "preventive_maintenance",
+    category: "hvac",
+    location: "345 East 15th Street",
+    sublocation: "Mechanical Room / Steam PRV Room",
+    stage: "To Do",
+    assets: ["Steam Safety Relief Valve", "Steam Pressure Reducing Valve Station"]
+  },
+  {
+    id: "29c750cd-7929-524a-ab7c-b3e1e965b0fd",
+    title: "Electrical Distribution Panel Preventive Maintenance",
+    description: "Conduct thermal imaging and tighten connections on main switchboard and distribution panels.",
+    severity: "medium",
+    priority: "medium",
+    type: "preventive_maintenance",
+    category: "electrical",
+    location: "345 East 15th Street",
+    sublocation: "Electrical Room",
+    stage: "To Do",
+    assets: ["Main Switchboard", "Distribution Panel"]
+  },
+  {
+    id: "c5338071-972b-5dc2-a676-cefade0b4838",
+    title: "Emergency Exit Sign & Lighting Test",
+    description: "Perform mandatory emergency exit signage and battery unit discharge test.",
+    severity: "critical",
+    priority: "critical",
+    type: "preventive_maintenance",
+    category: "fire_and_life_safety",
+    location: "345 East 15th Street",
+    sublocation: "All Floors",
+    stage: "To Do",
+    assets: ["Emergency Exit Signs", "Emergency Battery Units"]
+  }
+];
+
+let selectedWO = null;
+let selectedSeverity = "high";
+let stillHappening = "yes";
+
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.flow-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  document.getElementById('step-' + name).classList.add('active');
+
+  if (name === 'enrich') runEnrichment();
+  if (name === 'workflow') generateWorkflow();
+}
+
+function selectWorkOrder(idx) {
+  selectedWO = workOrders[idx];
+  document.querySelectorAll('.wo-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('wo-' + idx).classList.add('selected');
+  
+  // Show context in report panel
+  document.getElementById('selected-wo-context').classList.remove('hidden');
+  document.getElementById('selected-wo-title').textContent = selectedWO.title;
+  
+  setTimeout(() => showPanel('report'), 300);
+}
+
+function selectSeverity(el, value) {
+  el.parentElement.querySelectorAll('.severity-pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedSeverity = value;
+}
+
+function selectStillHappening(el, value) {
+  el.parentElement.querySelectorAll('.severity-pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  stillHappening = value;
+}
+
+function runAIStructuring() {
+  showPanel('ai');
+  document.getElementById('ai-loading').classList.remove('hidden');
+  document.getElementById('ai-results').classList.add('hidden');
+
+  const observation = document.getElementById('observation-text').value || 
+    "The exit sign on the 3rd floor stairwell near room 312 has been completely dark for two weeks. The stairwell is really hard to see in at night and during fire drills.";
+  const location = document.getElementById('observation-location').value || 
+    "3rd floor stairwell B, near room 312";
+
+  setTimeout(() => {
+    document.getElementById('ai-loading').classList.add('hidden');
+    document.getElementById('ai-results').classList.remove('hidden');
+
+    // Generate AI structured output based on the selected work order
+    let aiData;
+    if (selectedWO && selectedWO.category === 'fire_and_life_safety') {
+      aiData = {
+        issueType: "Fire & Life Safety — Emergency Lighting Failure",
+        location: location || "3rd floor stairwell B, near room 312",
+        assetCategory: "Emergency Exit Sign, Battery Backup Unit",
+        severity: "Critical",
+        urgency: "Same day — life safety system failure",
+        affectedUsers: "All building occupants using stairwell B egress path",
+        evidenceQuality: "High — specific location, duration, and impact described",
+        likelyRootCause: "Battery failure, LED burnout, or wiring fault in exit sign unit",
+        missingInfo: "Photo of the unit, model number, whether other signs in the stairwell are also affected",
+        suggestedFollowUp: "Check all exit signs in stairwell B, inspect battery terminals, verify emergency lighting circuit",
+        workflowAction: "Immediate inspection + replacement if battery test fails"
+      };
+    } else if (selectedWO && selectedWO.category === 'hvac') {
+      aiData = {
+        issueType: "HVAC — Steam System / Heating Comfort",
+        location: location || "Mechanical Room / Steam PRV Room",
+        assetCategory: "Steam Pressure Reducing Valve, Safety Relief Valve",
+        severity: "High",
+        urgency: "Within 48 hours — heating system integrity",
+        affectedUsers: "All building occupants relying on steam heating",
+        evidenceQuality: "Moderate — general description, needs field confirmation",
+        likelyRootCause: "Valve wear, PRV diaphragm degradation, or relief valve weeping",
+        missingInfo: "Last test date, current inlet/outlet pressures, audible hissing or leaking",
+        suggestedFollowUp: "Verify PRV setpoint, inspect relief valve discharge pipe, check condensate return",
+        workflowAction: "Schedule inspection with steam specialist, prep isolation procedure"
+      };
+    } else {
+      aiData = {
+        issueType: "Electrical — Distribution Panel Maintenance",
+        location: location || "Electrical Room, Basement Level",
+        assetCategory: "Main Switchboard, Distribution Panels",
+        severity: "Medium",
+        urgency: "Within 1 week",
+        affectedUsers: "All building occupants (power reliability)",
+        evidenceQuality: "Moderate — generic description needs specifics",
+        likelyRootCause: "Loose connections, thermal buildup, aging breakers",
+        missingInfo: "Which panels show discoloration, any reported flickering, breaker trip history",
+        suggestedFollowUp: "Perform thermal scan of all panels, document hotspots, check torque specs",
+        workflowAction: "Schedule thermal imaging during peak load hours"
+      };
     }
 
-    // ─── Detail Panel ──────────────────────────────────────────────────
-    function showDetail(id) {
-      selectedWorkOrder = allWorkOrders.find(wo => wo.id === id);
-      if (!selectedWorkOrder) return;
+    const fieldsHtml = Object.entries(aiData).map(([key, value]) => {
+      const labels = {
+        issueType: "Issue Type",
+        location: "Location",
+        assetCategory: "Asset Category",
+        severity: "Severity",
+        urgency: "Urgency",
+        affectedUsers: "Affected Users",
+        evidenceQuality: "Evidence Quality",
+        likelyRootCause: "Likely Root Cause",
+        missingInfo: "Missing Information",
+        suggestedFollowUp: "Follow-Up Questions",
+        workflowAction: "Suggested Action"
+      };
+      return `<div class="ai-field">
+        <div class="ai-field-label">${labels[key] || key}</div>
+        <div class="ai-field-value">${value}</div>
+      </div>`;
+    }).join('');
 
-      const wo = selectedWorkOrder;
-      const panel = document.getElementById('detailPanel');
-      const layout = document.getElementById('mainLayout');
-      
-      panel.classList.remove('hidden');
-      layout.classList.remove('detail-closed');
+    document.getElementById('ai-structured-fields').innerHTML = fieldsHtml;
 
-      const isOverdue = wo.dueDate && new Date(wo.dueDate) < new Date() && 
-                        wo.workOrderStage?.name?.toLowerCase() !== 'completed';
+    // Enhanced description
+    let enhanced;
+    if (selectedWO && selectedWO.category === 'fire_and_life_safety') {
+      enhanced = `Emergency exit sign in 3rd floor stairwell B (near room 312) has been non-functional for approximately two weeks. Student reports difficulty navigating the stairwell during evening hours and fire drills. This represents a life-safety egress illumination failure affecting all occupants who use stairwell B as their primary or secondary evacuation route. The unit likely has a failed battery or burned-out LED module. This stairwell serves classrooms 308–315 and is a required egress path per the building's fire safety plan. Immediate inspection and repair required. If battery test fails, unit must be replaced within 24 hours per NYC Fire Code §1011.5.3.`;
+    } else if (selectedWO && selectedWO.category === 'hvac') {
+      enhanced = `Annual steam system inspection required for pressure reducing valve station and safety relief valves in the Mechanical Room and Steam PRV Room at 345 East 15th Street. Building uses district steam (Con Edison supply) with a steam-to-hot-water heat exchanger feeding the heating loop. Critical assets include the PRV station (reduces incoming ~125 PSI to building operating pressure), safety relief valves (last tested date unknown), condensate return pump set, and associated steam traps. Inspection should verify PRV setpoint accuracy, relief valve lift pressure, condensate system integrity, and steam trap operation. Any operator or custodian observations about unusual sounds, leaks, or heating inconsistencies should be documented during inspection.`;
+    } else {
+      enhanced = `Electrical distribution panel preventive maintenance required at 345 East 15th Street. Scope includes thermal imaging of main switchboard and all downstream distribution panels to identify hotspots indicating loose connections or overloaded circuits. All connection points should be torque-checked to manufacturer specifications. Building electrical system serves critical loads including emergency lighting, fire alarm panel, and elevator controls. Any student or staff reports of flickering lights, outlet failures, or breaker trips should be cross-referenced with thermal findings. Panels serving high-load areas (cafeteria, gymnasium, computer labs) should be prioritized.`;
+    }
+    document.getElementById('ai-enhanced-description').textContent = enhanced;
+  }, 1500);
+}
 
-      document.getElementById('detailContent').innerHTML = `
-        <h2>${wo.title}</h2>
-        
-        <div class="detail-section">
-          <h3>Details</h3>
-          <div class="detail-row"><span class="label">ID</span><span class="value">${wo.id}</span></div>
-          <div class="detail-row"><span class="label">Status</span><span class="value"><span class="badge badge-${isOverdue ? 'overdue' : wo.workOrderStage?.name?.toLowerCase().replace(/\s/g, '-')}">${isOverdue ? 'OVERDUE' : wo.workOrderStage?.name}</span></span></div>
-          <div class="detail-row"><span class="label">Priority</span><span class="value priority-${(wo.severity || '').toLowerCase()}">${wo.severity || wo.executionPriority || '—'}</span></div>
-          <div class="detail-row"><span class="label">Created</span><span class="value">${new Date(wo.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span></div>
-          <div class="detail-row"><span class="label">Due</span><span class="value" style="${isOverdue ? 'color: var(--danger); font-weight: 600;' : ''}">${wo.dueDate ? new Date(wo.dueDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '—'}</span></div>
-          <div class="detail-row"><span class="label">Assigned To</span><span class="value">${wo.assignee?.name || 'Unassigned'}</span></div>
+function runEnrichment() {
+  document.getElementById('enrichment-loading').classList.remove('hidden');
+  document.getElementById('enrichment-results').classList.add('hidden');
+
+  setTimeout(() => {
+    document.getElementById('enrichment-loading').classList.add('hidden');
+    document.getElementById('enrichment-results').classList.remove('hidden');
+
+    let enrichmentHtml = '';
+
+    if (selectedWO && selectedWO.category === 'fire_and_life_safety') {
+      enrichmentHtml = `
+        <div class="enrichment-card">
+          <div class="enrichment-source"><i class="fa-solid fa-building-columns"></i> NYC DOB — Building Information System</div>
+          <div class="enrichment-text">345 East 15th Street (BIN: 1017890) — Last Certificate of Occupancy issued 2019. Building classification: E (Educational). 5 stories, ~45,000 sq ft. Annual fire safety inspection required.</div>
+          <div class="enrichment-implication"><i class="fa-solid fa-exclamation-triangle"></i> <strong>Operational implication:</strong> As an Educational occupancy (Group E), all egress lighting and exit signage must comply with NYC Building Code §1011.5 and Fire Code §1104.5. Non-functional exit signs in required egress paths can result in DOB violation and FDNY citation during inspection.</div>
         </div>
-
-        <div class="detail-section">
-          <h3>Description</h3>
-          <div class="detail-description">${wo.description || 'No description provided.'}</div>
+        <div class="enrichment-card">
+          <div class="enrichment-source"><i class="fa-solid fa-fire"></i> FDNY — Inspection History</div>
+          <div class="enrichment-text">Last FDNY inspection: March 2026. No open violations related to emergency lighting. However, building received a deficiency notice in 2024 for "exit sign illumination below minimum standards" in basement stairwell (since corrected). Pattern suggests aging battery units across stairwells.</div>
+          <div class="enrichment-implication"><i class="fa-solid fa-exclamation-triangle"></i> <strong>Operational implication:</strong> Prior deficiency in same category suggests systemic battery aging. Recommend full building survey of all emergency lighting units, not just the reported one. Proactive replacement schedule may prevent future violations.</div>
         </div>
-
-        ${wo.asset ? `
-        <div class="detail-section">
-          <h3>Linked Asset</h3>
-          <div class="detail-row"><span class="label">Name</span><span class="value">${wo.asset.name}</span></div>
-          <div class="detail-row"><span class="label">Category</span><span class="value">${wo.asset.category || '—'}</span></div>
-          <div class="detail-row"><span class="label">Status</span><span class="value">${wo.asset.status || '—'}</span></div>
+        <div class="enrichment-card">
+          <div class="enrichment-source"><i class="fa-solid fa-phone"></i> NYC 311 — Complaint History</div>
+          <div class="enrichment-text">2 complaints filed in last 12 months for 345 E 15th St related to "Building Condition" — one regarding hallway lighting (resolved), one regarding stairwell maintenance (open). No complaints specifically mentioning emergency exit signs.</div>
+          <div class="enrichment-implication"><i class="fa-solid fa-exclamation-triangle"></i> <strong>Operational implication:</strong> Student report may be the first documentation of this specific failure. Filing a proactive maintenance record now prevents a 311 complaint from triggering a DOB inspection response.</div>
         </div>
-        ` : ''}
-
-        ${wo.location ? `
-        <div class="detail-section">
-          <h3>Location</h3>
-          <div class="detail-row"><span class="label">Building</span><span class="value">${wo.location.locationName}</span></div>
-          <div class="detail-row"><span class="label">Address</span><span class="value">${wo.location.address || '—'}</span></div>
+        <div class="enrichment-card">
+          <div class="enrichment-source"><i class="fa-solid fa-scale-balanced"></i> Compliance Obligations</div>
+          <div class="enrichment-text"><strong>NYC Fire Code §1104.5:</strong> Emergency lighting must illuminate egress paths for min 90 minutes during power failure. <strong>NYC Building Code §1011.5.3:</strong> Exit signs shall be illuminated at all times. <strong>Local Law 26/2004:</strong> Retroactive fire safety requirements for non-sprinklered buildings. <strong>Annual inspection requirement:</strong> All emergency lighting must be tested monthly (30-sec) and annually (90-min discharge).</div>
+          <div class="enrichment-implication"><i class="fa-solid fa-exclamation-triangle"></i> <strong>Operational implication:</strong> A completely dark exit sign for 2 weeks is a code violation in progress. Must be repaired before next FDNY inspection or building could face penalties. Document repair date for compliance records.</div>
+        </div>`;
+    } else if (selectedWO && selectedWO.category === 'hvac') {
+      enrichmentHtml = `
+        <div class="enrichment-card">
+          <div class="enrichment-source"><i class="fa-solid fa-building-columns"></i> NYC DOB — Boiler/Pressure Vessel Records</div>
+          <div class="enrichment-text">345 East 15th Street has registered pressure vessels (steam system) requiring annual DOB inspection. Last filed inspection report: January 2025. System operates on Con Edison district steam supply.</div>
+          <div class="enrichment-implication"><i class="fa-solid fa-exclamation-triangle"></i> <strong>Operational implication:</strong> Annual DOB pressure vessel inspection is overdue if not yet scheduled for 2026. Safety relief valves must be tested and certified annually. Non-compliance can result in DOB violation and potential service interruption.</div>
         </div>
-        ` : ''}
-
-        <div class="signal-section">
-          <h3>📡 Student Signal</h3>
-          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
-            Attach a one-line observation from lived experience to this work order.
-          </p>
-          <textarea class="signal-input" id="signalInput" placeholder="e.g., The bathroom has been closed for 2 weeks. Water near the sink every morning."></textarea>
-          <button class="signal-btn" onclick="submitSignal('${wo.id}')">Submit Signal</button>
-          <div class="signal-success" id="signalSuccess">✓ Signal submitted and linked to ${wo.id}</div>
+        <div class="enrichment-card">
+          <div class="enrichment-source"><i class="fa-solid fa-phone"></i> NYC 311 — Heating Complaints</div>
+          <div class="enrichment-text">3 heating complaints filed for this address in the 2025-2026 heating season. Complaint types: "No heat" (1), "Inadequate heat" (2). All marked as "action taken" by DOB.</div>
+          <div class="enrichment-implication"><i class="fa-solid fa-exclamation-triangle"></i> <strong>Operational implication:</strong> Recurring heating complaints suggest the steam system may have underlying issues beyond what routine PM captures. PRV malfunction or steam trap failures could explain intermittent heat delivery. Inspection should specifically check zone valves and steam distribution balance.</div>
         </div>
-      `;
-
-      // Re-render table to show selected state
-      renderTable();
+        <div class="enrichment-card">
+          <div class="enrichment-source"><i class="fa-solid fa-scale-balanced"></i> Compliance Obligations</div>
+          <div class="enrichment-text"><strong>NYC Admin Code §27-792:</strong> Annual pressure vessel inspection required. <strong>DOB Bulletin 2019-003:</strong> Steam system safety requirements. <strong>Con Edison Service Agreement:</strong> Customer-side PRV maintenance is building owner responsibility. <strong>HPD Housing Standards:</strong> Heat must be maintained at 68°F (day) / 62°F (night) during heating season.</div>
+          <div class="enrichment-implication"><i class="fa-solid fa-exclamation-triangle"></i> <strong>Operational implication:</strong> Combine this PM work order with DOB inspection requirement to avoid duplicate visits. Ensure safety relief valve test results are documented for DOB filing.</div>
+        </div>`;
+    } else {
+      enrichmentHtml = `
+        <div class="enrichment-card">
+          <div class="enrichment-source"><i class="fa-solid fa-building-columns"></i> NYC DOB — Electrical Records</div>
+          <div class="enrichment-text">345 East 15th Street — Electrical permit history shows last major electrical work in 2018 (service upgrade). No open electrical violations. Building electrical system rated for educational occupancy load.</div>
+          <div class="enrichment-implication"><i class="fa-solid fa-exclamation-triangle"></i> <strong>Operational implication:</strong> System is 8+ years since last major work. Thermal imaging during PM should establish baseline for connection integrity across all panels.</div>
+        </div>
+        <div class="enrichment-card">
+          <div class="enrichment-source"><i class="fa-solid fa-scale-balanced"></i> Compliance Obligations</div>
+          <div class="enrichment-text"><strong>NFPA 70B:</strong> Recommended practice for electrical equipment maintenance. <strong>NYC Electrical Code:</strong> Distribution equipment in educational occupancies must maintain arc-flash labeling. <strong>OSHA 1910.333:</strong> Qualified persons only for energized work.</div>
+          <div class="enrichment-implication"><i class="fa-solid fa-exclamation-triangle"></i> <strong>Operational implication:</strong> Ensure thermal imaging technician is qualified per NFPA 70E. Document all findings for insurance and code compliance. Any hotspot > 20°C above ambient requires immediate follow-up.</div>
+        </div>`;
     }
 
-    function closeDetail() {
-      document.getElementById('detailPanel').classList.add('hidden');
-      document.getElementById('mainLayout').classList.add('detail-closed');
-      selectedWorkOrder = null;
-      renderTable();
-    }
+    document.getElementById('enrichment-cards').innerHTML = enrichmentHtml;
+  }, 2000);
+}
 
-    // ─── Student Signal ────────────────────────────────────────────────
-    async function submitSignal(workOrderId) {
-      const input = document.getElementById('signalInput');
-      const observation = input.value.trim();
-      
-      if (!observation) {
-        input.style.borderColor = 'var(--danger)';
-        setTimeout(() => input.style.borderColor = '', 2000);
-        return;
-      }
+function generateWorkflow() {
+  let stepsHtml = '';
+  let escalationHtml = '';
 
-      try {
-        await fetch(`${API_BASE}/api/signals`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            observation,
-            buildingId: selectedWorkOrder?.location?.id,
-            workOrderId,
-            studentName: 'Hackathon Participant'
-          })
-        });
+  if (selectedWO && selectedWO.category === 'fire_and_life_safety') {
+    stepsHtml = `
+      <div class="workflow-step"><div class="workflow-number">1</div><div class="workflow-content"><div class="workflow-action">Immediate Visual Inspection</div><div class="workflow-detail">Dispatch maintenance to 3rd floor stairwell B within 4 hours. Verify exit sign condition, check if battery indicator light is present, note model number for replacement ordering.</div></div></div>
+      <div class="workflow-step"><div class="workflow-number">2</div><div class="workflow-content"><div class="workflow-action">Battery Discharge Test</div><div class="workflow-detail">Perform 90-second push-to-test on the unit. If sign does not illuminate, battery has failed. Check production date on unit — if >5 years old, full replacement recommended.</div></div></div>
+      <div class="workflow-step"><div class="workflow-number">3</div><div class="workflow-content"><div class="workflow-action">Survey Adjacent Units</div><div class="workflow-detail">Test all exit signs and emergency lighting in stairwell B (all floors) and adjacent stairwell A. Document any additional failures. Pattern of failures suggests batch replacement needed.</div></div></div>
+      <div class="workflow-step"><div class="workflow-number">4</div><div class="workflow-content"><div class="workflow-action">Repair or Replace</div><div class="workflow-detail">If battery failed: replace battery or entire unit (LED combo units preferred for longevity). If wiring fault: trace circuit from panel, repair connection. Must restore illumination within 24 hours of confirmed failure per code.</div></div></div>
+      <div class="workflow-step"><div class="workflow-number">5</div><div class="workflow-content"><div class="workflow-action">Document for Compliance</div><div class="workflow-detail">Log repair in maintenance system with date, time, technician, and parts used. File updated emergency lighting test log for FDNY inspection readiness. Photo before/after.</div></div></div>
+      <div class="workflow-step"><div class="workflow-number">6</div><div class="workflow-content"><div class="workflow-action">Student Verification</div><div class="workflow-detail">Send verification request to reporting student within 72 hours of repair. Confirm the stairwell is now properly illuminated. Close work order only after student confirms.</div></div></div>`;
+    
+    escalationHtml = `
+      <div class="workflow-escalation">
+        <h4><i class="fa-solid fa-triangle-exclamation"></i> Escalation Triggers</h4>
+        <p>• If more than 3 exit signs are non-functional → escalate to building manager + FDNY notification<br>
+        • If stairwell has NO functioning emergency lighting → immediate closure of stairwell as egress path until repaired<br>
+        • If wiring fault found → electrical contractor required, may trigger DOB notification<br>
+        • If this is the second failure in same stairwell within 12 months → flag for capital replacement budget</p>
+      </div>`;
+  } else if (selectedWO && selectedWO.category === 'hvac') {
+    stepsHtml = `
+      <div class="workflow-step"><div class="workflow-number">1</div><div class="workflow-content"><div class="workflow-action">Pre-Inspection Preparation</div><div class="workflow-detail">Review prior inspection reports and 311 complaint history. Prepare isolation procedure for PRV station. Notify building occupants of potential brief heating interruption during valve testing.</div></div></div>
+      <div class="workflow-step"><div class="workflow-number">2</div><div class="workflow-content"><div class="workflow-action">PRV Station Inspection</div><div class="workflow-detail">Verify inlet/outlet pressure readings match design setpoints. Inspect diaphragm and pilot system. Check for downstream pressure creep indicating seat wear. Document all readings.</div></div></div>
+      <div class="workflow-step"><div class="workflow-number">3</div><div class="workflow-content"><div class="workflow-action">Safety Relief Valve Test</div><div class="workflow-detail">Test each safety relief valve for proper lift pressure and reseat. If valve fails to reseat cleanly, replace immediately. Document test results for DOB filing.</div></div></div>
+      <div class="workflow-step"><div class="workflow-number">4</div><div class="workflow-content"><div class="workflow-action">System-Wide Steam Check</div><div class="workflow-detail">Inspect steam traps (listen for blow-through), check condensate return pump operation, verify heat exchanger performance. Cross-reference findings with heating complaint locations.</div></div></div>
+      <div class="workflow-step"><div class="workflow-number">5</div><div class="workflow-content"><div class="workflow-action">File DOB Inspection Report</div><div class="workflow-detail">Complete and file annual pressure vessel inspection report with NYC DOB. Include all test results, repairs made, and next recommended service date.</div></div></div>`;
+    
+    escalationHtml = `
+      <div class="workflow-escalation">
+        <h4><i class="fa-solid fa-triangle-exclamation"></i> Escalation Triggers</h4>
+        <p>• If safety relief valve fails to reseat → immediate replacement required, cannot return system to service<br>
+        • If PRV is passing (downstream pressure rising) → emergency repair, risk of overpressure<br>
+        • If multiple steam traps are failed → system efficiency compromised, likely cause of heating complaints</p>
+      </div>`;
+  } else {
+    stepsHtml = `
+      <div class="workflow-step"><div class="workflow-number">1</div><div class="workflow-content"><div class="workflow-action">Schedule Thermal Imaging</div><div class="workflow-detail">Coordinate thermal scan during peak load hours (10AM-2PM school day). Ensure IR camera is calibrated. Technician must be NFPA 70E qualified.</div></div></div>
+      <div class="workflow-step"><div class="workflow-number">2</div><div class="workflow-content"><div class="workflow-action">Panel-by-Panel Scan</div><div class="workflow-detail">Image all panels with covers on first (through ventilation slots), then open covers for detailed scan. Document each hotspot with thermal image + visual photo.</div></div></div>
+      <div class="workflow-step"><div class="workflow-number">3</div><div class="workflow-content"><div class="workflow-action">Connection Torque Check</div><div class="workflow-detail">De-energize panels one at a time (coordinate with building operations). Torque all connections to manufacturer spec. Re-energize and verify operation.</div></div></div>
+      <div class="workflow-step"><div class="workflow-number">4</div><div class="workflow-content"><div class="workflow-action">Document & Baseline</div><div class="workflow-detail">Create thermal baseline report for future comparison. Flag any connections showing >10°C rise for 6-month recheck.</div></div></div>`;
+    
+    escalationHtml = `
+      <div class="workflow-escalation">
+        <h4><i class="fa-solid fa-triangle-exclamation"></i> Escalation Triggers</h4>
+        <p>• If any connection shows >40°C rise above ambient → immediate de-energization and repair<br>
+        • If evidence of arcing or melting → electrical contractor + DOB notification<br>
+        • If panels serving life safety systems show issues → priority repair before other panels</p>
+      </div>`;
+  }
 
-        document.getElementById('signalSuccess').style.display = 'block';
-        input.value = '';
-      } catch (error) {
-        // In demo mode, still show success
-        document.getElementById('signalSuccess').style.display = 'block';
-        input.value = '';
-      }
-    }
+  document.getElementById('workflow-steps').innerHTML = stepsHtml;
+  document.getElementById('workflow-escalation').innerHTML = escalationHtml;
+}
 
-    // ─── Boot ──────────────────────────────────────────────────────────
-    init();
-  </script>
+function selectClosure(el, status) {
+  document.querySelectorAll('.closure-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+
+  const resultDiv = document.getElementById('closure-result');
+  const resultText = document.getElementById('closure-result-text');
+  resultDiv.classList.remove('hidden');
+
+  const messages = {
+    fixed: "✅ Thank you! Your verification confirms the issue is resolved. The work order will be closed and your confirmation is logged as evidence of successful repair. The system learned from your report.",
+    partial: "⚠️ Thank you for the update. The work order will be flagged as 'partially resolved' and a follow-up inspection will be scheduled. You'll be asked again in one week.",
+    no: "❌ Your verification has been logged. The work order is being re-opened and escalated to the maintenance supervisor. A technician will be reassigned within 48 hours. Thank you for keeping the system honest.",
+    worse: "🚨 ESCALATION TRIGGERED. Your report indicates the condition has deteriorated. The work order has been upgraded to CRITICAL priority and the building manager has been notified. A response team will inspect within 24 hours. If this is a safety emergency, please also report to building security immediately."
+  };
+
+  resultText.textContent = messages[status];
+}
+</script>
 </body>
 </html>
