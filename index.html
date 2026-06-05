@@ -118,6 +118,63 @@ body { font-family: var(--font-sans); background: var(--color-bg); color: var(--
 .badge-stage { background: var(--color-primary-light); color: var(--color-primary); }
 .badge-category { background: #f3e8ff; color: #7c3aed; }
 
+/* Confidence badges */
+.confidence-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.conf-verified { background: #e3fcef; color: #006644; }
+.conf-likely { background: #deebff; color: #0052CC; }
+.conf-inferred { background: #f3e8ff; color: #7c3aed; }
+.conf-conflicting { background: #ffebe6; color: #de350b; }
+.conf-missing { background: #fffae6; color: #b86e00; }
+.conf-needs-inspection { background: #f1f5f9; color: #44546f; }
+
+/* Record panel */
+.record-action {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  transition: all 0.2s;
+}
+.record-action:hover { border-color: var(--color-primary); background: #f8faff; }
+.record-action .record-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.record-action .record-text { flex: 1; }
+.record-action .record-text strong { font-size: 14px; display: block; }
+.record-action .record-text small { font-size: 12px; color: var(--color-text-secondary); }
+.record-action .record-status {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+.record-status.queued { background: var(--color-warning-bg); color: #b86e00; }
+.record-status.sent { background: var(--color-success-bg); color: #006644; }
+
+
 /* Work Order Cards */
 .wo-card { cursor: pointer; border-left: 4px solid transparent; }
 .wo-card:hover { border-left-color: var(--color-primary); }
@@ -431,6 +488,10 @@ textarea { resize: vertical; min-height: 100px; }
       <i class="fa-solid fa-route"></i> Workflow
     </div>
     <span class="flow-arrow">→</span>
+    <div class="flow-step" onclick="showPanel('record')" id="step-record">
+      <i class="fa-solid fa-upload"></i> Record
+    </div>
+    <span class="flow-arrow">→</span>
     <div class="flow-step" onclick="showPanel('closure')" id="step-closure">
       <i class="fa-solid fa-circle-check"></i> Verify
     </div>
@@ -655,13 +716,97 @@ textarea { resize: vertical; min-height: 100px; }
     </div>
 
     <div style="margin-top: 20px;">
-      <button class="btn btn-success btn-lg" onclick="showPanel('closure')">
-        <i class="fa-solid fa-circle-check"></i> Submit & Start Verification
+      <button class="btn btn-success btn-lg" onclick="showPanel('record')">
+        <i class="fa-solid fa-upload"></i> Record to CriticalAsset
       </button>
     </div>
   </div>
 
-  <!-- PANEL 6: Closure Verification -->
+
+  <!-- PANEL 6.5: Record to CriticalAsset -->
+  <div class="panel" id="panel-record">
+    <div class="section-header">
+      <h2><i class="fa-solid fa-upload"></i> Record to CriticalAsset</h2>
+      <p>Push structured intelligence back into the system — make the building record better.</p>
+    </div>
+
+    <div class="card" style="border-left: 4px solid var(--color-primary); margin-bottom: 20px;">
+      <div style="font-size: 12px; color: var(--color-text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">What gets updated</div>
+      <p style="font-size: 14px; color: var(--color-text-secondary);">Based on the student signal, AI analysis, and public evidence, the following records will be created or updated in CriticalAsset:</p>
+    </div>
+
+    <div id="record-actions">
+      <div class="record-action">
+        <div class="record-icon"><i class="fa-solid fa-ticket"></i></div>
+        <div class="record-text">
+          <strong>Update Work Order</strong>
+          <small>Enrich existing ticket with student observation, AI-structured fields, and evidence</small>
+        </div>
+        <span class="record-status queued">Queued</span>
+      </div>
+      <div class="record-action">
+        <div class="record-icon"><i class="fa-solid fa-location-dot"></i></div>
+        <div class="record-text">
+          <strong>Link Room / Location</strong>
+          <small>Attach specific sub-location (e.g., "3rd floor stairwell B") to the work order</small>
+        </div>
+        <span class="record-status queued">Queued</span>
+      </div>
+      <div class="record-action">
+        <div class="record-icon"><i class="fa-solid fa-gear"></i></div>
+        <div class="record-text">
+          <strong>Link Asset</strong>
+          <small>Connect issue to identified asset (exit sign unit, valve, panel)</small>
+        </div>
+        <span class="record-status queued">Queued</span>
+      </div>
+      <div class="record-action">
+        <div class="record-icon"><i class="fa-solid fa-file-circle-plus"></i></div>
+        <div class="record-text">
+          <strong>Add Evidence Record</strong>
+          <small>Attach student report, AI analysis, and public data findings as evidence</small>
+        </div>
+        <span class="record-status queued">Queued</span>
+      </div>
+      <div class="record-action">
+        <div class="record-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <div class="record-text">
+          <strong>Flag Missing Information</strong>
+          <small>Mark: photo needed, shutoff valve location unknown, asset tag missing</small>
+        </div>
+        <span class="record-status queued">Queued</span>
+      </div>
+      <div class="record-action">
+        <div class="record-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+        <div class="record-text">
+          <strong>Recommend Inspection</strong>
+          <small>Queue inspection task with confidence level and priority</small>
+        </div>
+        <span class="record-status queued">Queued</span>
+      </div>
+    </div>
+
+    <div style="margin-top: 24px; display: flex; gap: 12px;">
+      <button class="btn btn-primary btn-lg" onclick="recordToCriticalAsset()">
+        <i class="fa-solid fa-paper-plane"></i> Push to CriticalAsset
+      </button>
+      <button class="btn btn-secondary" onclick="showPanel('closure')">
+        Skip → Verify
+      </button>
+    </div>
+
+    <div id="record-success" class="hidden" style="margin-top: 20px;">
+      <div class="card" style="background: var(--color-success-bg); border-color: var(--color-success);">
+        <h4 style="color: var(--color-success); margin-bottom: 8px;"><i class="fa-solid fa-circle-check"></i> Recorded Successfully</h4>
+        <p style="font-size: 14px; color: var(--color-text-secondary);">All 6 updates have been queued in CriticalAsset. The building record is now richer because a student spoke up. Next: verify the fix.</p>
+        <button class="btn btn-success" style="margin-top: 12px;" onclick="showPanel('closure')">
+          <i class="fa-solid fa-circle-check"></i> Continue to Verification
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 7: Closure Verification -->
   <div class="panel" id="panel-closure">
     <div class="section-header">
       <h2><i class="fa-solid fa-circle-check"></i> Closure Verification</h2>
@@ -761,6 +906,7 @@ function showPanel(name) {
 
   if (name === 'enrich') runEnrichment();
   if (name === 'workflow') generateWorkflow();
+  if (name === 'record') initRecordPanel();
 }
 
 function selectWorkOrder(idx) {
@@ -847,7 +993,28 @@ function runAIStructuring() {
       };
     }
 
-    const fieldsHtml = Object.entries(aiData).map(([key, value]) => {
+    const confidenceMap = {
+        issueType: "verified",
+        location: "verified",
+        assetCategory: "likely",
+        severity: "inferred",
+        urgency: "inferred",
+        affectedUsers: "likely",
+        evidenceQuality: "verified",
+        likelyRootCause: "inferred",
+        missingInfo: "missing",
+        suggestedFollowUp: "needs-inspection",
+        workflowAction: "likely"
+      };
+      const confLabels = {
+        "verified": "Verified",
+        "likely": "Likely",
+        "inferred": "Inferred",
+        "conflicting": "Conflicting",
+        "missing": "Missing",
+        "needs-inspection": "Needs Inspection"
+      };
+      const fieldsHtml = Object.entries(aiData).map(([key, value]) => {
       const labels = {
         issueType: "Issue Type",
         location: "Location",
@@ -861,9 +1028,10 @@ function runAIStructuring() {
         suggestedFollowUp: "Follow-Up Questions",
         workflowAction: "Suggested Action"
       };
+      const conf = confidenceMap[key] || "inferred";
       return `<div class="ai-field">
         <div class="ai-field-label">${labels[key] || key}</div>
-        <div class="ai-field-value">${value}</div>
+        <div class="ai-field-value">${value} <span class="confidence-badge conf-${conf}">${confLabels[conf]}</span></div>
       </div>`;
     }).join('');
 
@@ -1021,6 +1189,33 @@ function selectClosure(el, status) {
   };
 
   resultText.textContent = messages[status];
+}
+
+function initRecordPanel() {
+  document.getElementById('record-success').classList.add('hidden');
+  document.querySelectorAll('.record-status').forEach(s => {
+    s.textContent = 'Queued';
+    s.classList.remove('sent');
+    s.classList.add('queued');
+  });
+}
+
+function recordToCriticalAsset() {
+  const statuses = document.querySelectorAll('.record-status');
+  let delay = 0;
+  statuses.forEach((s, i) => {
+    setTimeout(() => {
+      s.textContent = 'Sent ✓';
+      s.classList.remove('queued');
+      s.classList.add('sent');
+      if (i === statuses.length - 1) {
+        setTimeout(() => {
+          document.getElementById('record-success').classList.remove('hidden');
+        }, 500);
+      }
+    }, delay);
+    delay += 400;
+  });
 }
 </script>
 </body>
