@@ -1,3 +1,4 @@
+```xml
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,6 +39,42 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text); line-height: 1.5; min-height: 100vh; }
+
+
+/* Challenge Navigation Bar */
+.challenge-nav {
+  background: #0f1117;
+  border-bottom: 1px solid #2e3346;
+  padding: 8px 32px;
+  font-size: 13px;
+}
+.challenge-nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 100%;
+}
+.challenge-nav-label {
+  color: #8b92a8;
+  font-weight: 500;
+}
+.challenge-nav-links {
+  display: flex;
+  gap: 4px;
+}
+.challenge-link {
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: #8b92a8;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.challenge-link:hover { background: #1a1d27; color: #e4e7ef; }
+.challenge-link.active { background: #0052CC; color: white; }
 
 /* Header */
 .header {
@@ -463,6 +500,21 @@ textarea { resize: vertical; min-height: 100px; }
 </style>
 </head>
 <body>
+
+<!-- Cross-Challenge Navigation -->
+<div class="challenge-nav">
+  <div class="challenge-nav-inner">
+    <span class="challenge-nav-label">The City Hacks the State · Team 6</span>
+    <div class="challenge-nav-links">
+      <a href="challenge1/public/index.html" class="challenge-link">
+        <i class="fa-solid fa-chart-line"></i> Challenge 1: Dashboard
+      </a>
+      <a href="index.html" class="challenge-link active">
+        <i class="fa-solid fa-bolt"></i> Challenge 2: AI Workflow
+      </a>
+    </div>
+  </div>
+</div>
 
 <div class="header">
   <h1><i class="fa-solid fa-bolt"></i> Student Signal</h1>
@@ -1220,3 +1272,4 @@ function recordToCriticalAsset() {
 </script>
 </body>
 </html>
+```
